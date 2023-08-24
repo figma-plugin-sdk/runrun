@@ -1,0 +1,37 @@
+{
+  "name": "run-figma-run",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/run-figma-run/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/run-figma-run",
+        "main": "packages/run-figma-run/src/index.ts",
+        "tsConfig": "packages/run-figma-run/tsconfig.lib.json",
+        "assets": ["*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/run-figma-run/**/*.ts",
+          "packages/run-figma-run/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "coverage/run-figma-run"
+      }
+    }
+  },
+  "tags": []
+}
