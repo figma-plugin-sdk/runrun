@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@cva/test-reporter-html": [
+        "packages/reporters/test-reporter-html/src/index.ts"
+      ],
       "packages/run-figma-run": ["packages/run-figma-run/src/index.ts"]
     }
   }
