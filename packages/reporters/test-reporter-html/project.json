@@ -3,7 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/reporters/test-reporter-html/src",
   "projectType": "library",
-  "tags": ["test-reporter"],
+  "tags": ["components", "lib", "ui", "ui-lib"],
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
@@ -15,27 +15,44 @@
       }
     },
     "build": {
-      "executor": "@nx/vite:build",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
+      "defaultConfiguration": "development",
       "options": {
-        "outputPath": "dist/packages/reporters/test-reporter-html"
+        "target": "web",
+        "outputPath": "dist/packages/reporters/test-reporter-html",
+        "compiler": "swc",
+        "watch": true,
+        "main": "packages/reporters/test-reporter-html/src/client/js/mochawesome.js",
+        "tsConfig": "packages/reporters/test-reporter-html/tsconfig.lib.json",
+        "webpackConfig": "packages/reporters/test-reporter-html/webpack.config.js",
+        "postcssConfig": "packages/reporters/test-reporter-html/postcss.config.js",
+        "isolatedConfig": true
       },
       "configurations": {
-        "development": {
-          "mode": "development"
-        },
         "production": {
-          "mode": "production"
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "watch": true
         }
       }
     },
     "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "passWithNoTests": true,
-        "reportsDirectory": "../../../coverage/packages/reporters/test-reporter-html"
+        "jestConfig": "packages/reporters/test-reporter-html/jest.config.js",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
       }
     }
   }

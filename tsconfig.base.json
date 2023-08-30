@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@cva/test-reporter-html": [
-        "packages/reporters/test-reporter-html/src/index.ts"
+        "packages/reporters/test-reporter-html/src/index.js"
       ],
       "packages/run-figma-run": ["packages/run-figma-run/src/index.ts"]
     }
