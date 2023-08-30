@@ -6,18 +6,18 @@ import styles from './footer.css';
 
 const cx = classNames.bind(styles);
 
-const urls = {
-  site: 'http://adamgruber.github.io/mochawesome/',
-  github: 'https://github.com/adamgruber',
-};
+// const urls = {
+//   site: 'http://adamgruber.github.io/mochawesome/',
+//   github: 'https://github.com/adamgruber',
+// };
 
 const Footer = ({ version }) => {
-  const copyrightYear = new Date().getFullYear();
+  // const copyrightYear = new Date().getFullYear();
   return (
     <footer className={cx('component')}>
       <div className="container">
         <p>
-          &copy;
+          {/* &copy;
           {copyrightYear}
           &nbsp;
           <a href={urls.site} target="_blank" rel="noopener noreferrer">
@@ -27,7 +27,7 @@ const Footer = ({ version }) => {
           <a href={urls.github} target="_blank" rel="noopener noreferrer">
             Adam Gruber
           </a>{' '}
-          • <span>v{version}</span>
+          • <span>v{version}</span> */}
         </p>
         {}
       </div>

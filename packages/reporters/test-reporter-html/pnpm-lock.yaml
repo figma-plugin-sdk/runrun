@@ -16,8 +16,7 @@ specifiers:
   eslint-plugin-jsx-a11y: ^6.2.1
   eslint-plugin-react: ^7.12.4
   file-loader: ^3.0.1
-  highlight.js: ^9.15.6
-  html-webpack-inline-source-plugin: ^0.0.10
+  highlight.js: ^11.8.0
   html-webpack-plugin: ^5.5.3
   jsdom: ^14.0.0
   jsdom-global: ^3.0.2
@@ -82,8 +81,7 @@ devDependencies:
   eslint-plugin-jsx-a11y: 6.7.1_eslint@5.16.0
   eslint-plugin-react: 7.33.2_eslint@5.16.0
   file-loader: 3.0.1_webpack@5.88.2
-  highlight.js: 9.18.5
-  html-webpack-inline-source-plugin: 0.0.10
+  highlight.js: 11.8.0
   html-webpack-plugin: 5.5.3_webpack@5.88.2
   jsdom: 14.1.0
   jsdom-global: 3.0.2_jsdom@14.1.0
@@ -4291,10 +4289,9 @@ packages:
     hasBin: true
     dev: true
 
-  /highlight.js/9.18.5:
-    resolution: {integrity: sha512-a5bFyofd/BHCX52/8i8uJkjr9DYwXIPnM/plwI6W7ezItLGqzt7X2G2nXuYSfsIJdkwwj/g9DG1LkcGJI/dDoA==}
-    deprecated: Support has ended for 9.x series. Upgrade to @latest
-    requiresBuild: true
+  /highlight.js/11.8.0:
+    resolution: {integrity: sha512-MedQhoqVdr0U6SSnWPzfiadUcDHfN/Wzq25AkXiQv9oiOO/sG0S7XkvpFIqWBl9Yq1UYyYOOVORs5UW2XlPyzg==}
+    engines: {node: '>=12.0.0'}
     dev: true
 
   /hosted-git-info/2.8.9:
@@ -4341,14 +4338,6 @@ packages:
   /html-tags/2.0.0:
     resolution: {integrity: sha512-+Il6N8cCo2wB/Vd3gqy/8TZhTD3QvcVeQLCnZiGkGCH3JP28IgGAY41giccp2W4R3jfyJPAP318FQTa1yU7K7g==}
     engines: {node: '>=4'}
-    dev: true
-
-  /html-webpack-inline-source-plugin/0.0.10:
-    resolution: {integrity: sha512-0ZNU57u7283vrXSF5a4VDnVOMWiSwypKIp1z/XfXWoVHLA1r3Xmyxx5+Lz+mnthz/UvxL1OAf41w5UIF68Jngw==}
-    dependencies:
-      escape-string-regexp: 1.0.5
-      slash: 1.0.0
-      source-map-url: 0.4.1
     dev: true
 
   /html-webpack-plugin/5.5.3_webpack@5.88.2:
@@ -8634,11 +8623,6 @@ packages:
       lolex: 4.2.0
       nise: 1.5.3
       supports-color: 5.5.0
-    dev: true
-
-  /slash/1.0.0:
-    resolution: {integrity: sha512-3TYDR7xWt4dIqV2JauJr+EJeW356RXijHeUlO+8djJ+uBXPn8/2dpzBc8yQhh583sVvc9CvFAeQVgijsH+PNNg==}
-    engines: {node: '>=0.10.0'}
     dev: true
 
   /slash/2.0.0:

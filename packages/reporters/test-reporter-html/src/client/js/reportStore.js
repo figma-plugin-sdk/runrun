@@ -18,11 +18,11 @@ class ReportStore {
       filters: ['showPassed', 'showFailed', 'showPending', 'showSkipped'],
       initialLoadTimeout: 300,
       initialFilterState: null,
-      reportTitle: 'Mochawesome Report',
+      reportTitle: 'Run-figma-run Report',
       results: data.results || [],
       showHooksOptions: ['failed', 'always', 'never', 'context'],
       stats: data.stats || {},
-      VERSION: '__VERSION__'
+      VERSION: '1.0.0'
     });
     makeAutoObservable(this, {}, { autoBind: true });
     extendObservable(
@@ -77,7 +77,6 @@ class ReportStore {
 
   @action.bound
   toggleSingleFilter(prop) {
-    console.log('change filter', this);
     // Not in single filter mode or changing single filter
     if (this.singleFilter !== prop) {
       // Set filters to false

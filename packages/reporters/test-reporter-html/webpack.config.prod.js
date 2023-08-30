@@ -9,7 +9,11 @@ module.exports = composePlugins(withNx(), config => {
   // e.g. `config.plugins.push(new MyPlugin())`
   // config.output.filename = 'main.js'
   // Nx plugins for webpack.
-
+  config.output = {
+    filename: '[name].bundle.js',
+    clean: true,
+    // ...config.output
+  };
   config.resolve.modules = ['node_modules', 'src', 'src/client', 'styles'];
 
   config.module.rules ??= [];
@@ -21,7 +25,7 @@ module.exports = composePlugins(withNx(), config => {
         {
           loader: 'css-loader',
           options: {
-            // sourceMap: false,
+            sourceMap: false,
             modules: {
               mode: 'global',
               localIdentName: '[path][name]__[local]--[hash:base64:5]'
@@ -42,7 +46,7 @@ module.exports = composePlugins(withNx(), config => {
           options: {
             importLoaders: 1,
             modules: true,
-            // sourceMap: false,
+            sourceMap: false,
             modules: {
               mode: 'local',
               localIdentName: '[path][name]__[local]--[hash:base64:5]'

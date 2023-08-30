@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import isArray from 'lodash/isArray';
-import hljs from 'highlight.js/lib/highlight';
+import hljs from 'highlight.js';
 import classNames from 'classnames/bind';
 import styles from './test.css';
 
@@ -31,7 +31,7 @@ const CodeSnippet = ({
 
   const highlightCode = () => {
     if (shouldHighlight()) {
-      hljs.highlightBlock(codeRef.current);
+      hljs.highlightElement(codeRef.current);
     }
   };
 

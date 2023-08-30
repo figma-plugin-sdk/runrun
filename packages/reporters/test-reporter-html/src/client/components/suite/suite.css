@@ -39,6 +39,10 @@
   border-bottom: 1px solid var(--grey300);
 }
 
+li {
+  list-style: none;
+}
+
 .header {
   @extend %clearfix;
 

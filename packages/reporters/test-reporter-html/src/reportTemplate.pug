@@ -3,15 +3,10 @@ html
         meta(charset='utf-8')
         meta(http-equiv='X-UA-Compatible' content='IE=edge')
         meta(name='viewport' content='width=device-width, initial-scale=1')
-        include client/fonts/material-icons.svg
-        //- include client/fonts/roboto-light-webfont.svg
-        //- include client/fonts/roboto-medium-webfont.svg
-        //- include client/fonts/roboto-regular-webfont.svg
-        title Mochawesome Report
-    body(data-raw="{{}}")
         each cssFile in htmlWebpackPlugin.files.css
             style !{compilation.assets[cssFile.substr(htmlWebpackPlugin.files.publicPath.length)].source()}
         each jsFile in htmlWebpackPlugin.files.js
             script !{compilation.assets[jsFile.substr(htmlWebpackPlugin.files.publicPath.length)].source()}
+        title Run-figma-run Report
+    body(data-raw="{{}}")
         #report
-

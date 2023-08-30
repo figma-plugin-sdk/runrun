@@ -5,7 +5,7 @@ const FilterStyles = ({ filtered }) => {
   const node = useRef<HTMLStyleElement | null>(null);
 
   useEffect(() => {
-    console.log(node.current);
+    // console.log(node.current);
   }, []);
 
   return (

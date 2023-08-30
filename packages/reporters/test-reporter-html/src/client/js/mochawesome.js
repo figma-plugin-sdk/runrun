@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { MochawesomeReport } from 'components';
-import hljs from 'highlight.js/lib/highlight';
+import hljs from 'highlight.js';
 import ReportStore from './reportStore';
 import json from '../../lib/testJson';
 import ReportTemplate from '../../lib/reportTemplate';
@@ -25,7 +25,7 @@ document.addEventListener('readystatechange', event => {
     const container = document.getElementById('report');
 
     const root = createRoot(container); // createRoot(container!) if you use TypeScript
-    console.log('root', root);
+
 
     root.render(<MochawesomeReport store={store} />);
   }

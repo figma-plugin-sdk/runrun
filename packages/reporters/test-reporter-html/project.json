@@ -31,13 +31,14 @@
       },
       "configurations": {
         "production": {
+          "webpackConfig": "packages/reporters/test-reporter-html/webpack.config.prod.js",
           "optimization": true,
           "outputHashing": "all",
           "sourceMap": false,
           "namedChunks": false,
           "extractLicenses": true,
-          "vendorChunk": false,
-          "watch": true
+          
+          "vendorChunk": false
         }
       }
     },
