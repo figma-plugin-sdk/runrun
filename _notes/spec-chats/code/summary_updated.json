@@ -1,0 +1,115 @@
+{
+    "name": "Run, Figma, Run",
+    "nickname": "rfr",
+    "project_type": "npm package",
+    "package_manager": "pnpm",
+    "package": {
+        "visibility": "public",
+        "license": "MIT",
+        "devDependencies": [
+            "nx",
+            "@nx/workspace",
+            "@nx/js",
+            "typescript",
+            "prettier",
+            "eslint",
+            "rollup",
+            "jest"
+        ]
+    },
+    "folder_structure": {
+        "/src": "for typescript code",
+        "/assets": "for static HTML, CSS, and JS",
+        "/lib": "for output",
+        "/tests": "for Jest tests",
+        "/docs": "for the documentation site using Astro",
+        "/docs/api": "for automatically generate documentation using typedoc or tsdoc",
+        "/docs/guides": "for the guides on how to use RFR",
+        "README.md": "for a summary of the documentation"
+    },
+    "metadata": {
+        "language": "typescript",
+        "template": "nx standalone app workspace created with `pnpx create-nx-workspace@latest  run-figma-run --pm pnpm --preset=ts`",
+        "ui_framework": "none, pure JS, HTML, CSS",
+        "assets": [
+            "results.html",
+            "launch and test flow diagram"
+        ],
+        "missing_types": "Define ALL interfaces and types as TypeScript definitions (no implementation)",
+        "tools": [
+            "git",
+            "nx",
+            "rollup"
+        ],
+        "architecture": {
+            "figma": "Main application where everything runs.",
+            "sandboxedThread": "Restricted environment inside Figma where the plugin code executes.",
+            "rfr": "Replaces the main function of the plugin, running the tests.",
+            "plugin": "Original code that developers write, subject to testing by RFR.",
+            "iframe": "Contains the plugin UI and is used by RFR to output the test results."
+        },
+        "types": {
+            "RunnableFunction": "Function representing a test or suite. Defined in our conversation.",
+            "RunnableUnit": "Object representing a test or suite with options and modifiers. Defined in our conversation.",
+            "RunnableSet": "Object representing a suite with additional options and modifiers. Defined in our conversation.",
+            "ExecutionContext": "Object representing the execution context for tests and suites. Defined in our conversation."
+        },
+        "modifiers": {
+            "skip": "Skips the execution of the test or suite.",
+            "timeout": "Overrides the default timeout for the test or suite.",
+            "sequence": "Runs child suites or tests in order.",
+            "story": "Runs child suites or tests in order and stops at the first failed test or suite."
+        },
+        "code_snippets": {
+            "test_runner_class": "Code for the TestRunner class, handling registration, execution, modifiers, and results. Defined in our conversation.",
+            "examples_square": "Code for the Square class, representing a square with size, x, and y, and a method to split into quarters. Defined in our conversation.",
+            "examples_square_spec": "Code for testing the Square class, including suites and tests to assert its behavior. Defined in our conversation."
+        },
+        "integration": {
+            "description": "RFR replaces the main function of the plugin to run tests instead of the actual plugin code, and outputs the results as a single HTML page to Figma in place of the plugin's UI page.",
+            "with_bundler": "RFR integrates into the bundler (rollup, vite, esbuild, etc). When the build is executed with a env variable TEST_MODE present and not empty, RFR will change the entry point script given to the bundler."
+        },
+        "assertion_mechanism": "Basic equality checks are used as assertions. In a real-world scenario, a third-party assertion library would be used."
+    },
+    "implementation_plan": {
+        "Project Setup and Architecture": [
+            "Single Responsibility Principle",
+            "Factory and Singleton design patterns"
+        ],
+        "Test Runner Core": [
+            "Core logic",
+            "Functional Programming"
+        ],
+        "Test Suites and Execution Context": [
+            "Hierarchical structure",
+            "Isolated and inherited contexts"
+        ],
+        "Modifiers": [
+            "Implement skip, timeout, sequence, and story",
+            "Decorators"
+        ],
+        "Assertions and Failures": [
+            "Implement fail function",
+            "Differentiate assertion and exception"
+        ],
+        "Concurrency": [
+            "Web Workers"
+        ],
+        "Results Recording and Reporting": [
+            "Record successes and failures",
+            "Hierarchical TestRunResult"
+        ],
+        "Integration with Bundler": [
+            "Scripts for integration",
+            "Environment variable TEST_MODE"
+        ],
+        "Documentation and Comments": [
+            "Document codebase",
+            "Inline comments"
+        ],
+        "Testing and QA": [
+            "Unit tests",
+            "Manual tests"
+        ]
+    }
+}

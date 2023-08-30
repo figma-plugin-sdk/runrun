@@ -2724,7 +2724,7 @@ packages:
       rollup: 2.79.1
       rollup-plugin-copy: 3.4.0
       rollup-plugin-peer-deps-external: 2.2.4(rollup@2.79.1)
-      rollup-plugin-postcss: 4.0.2(postcss@8.4.28)
+      rollup-plugin-postcss: 4.0.2(postcss@8.4.28)(ts-node@10.9.1)
       rollup-plugin-typescript2: 0.34.1(rollup@2.79.1)(typescript@5.1.6)
       rxjs: 7.8.1
       tslib: 2.6.2
@@ -3459,6 +3459,11 @@ packages:
     engines: {node: '>= 10'}
     dev: true
 
+  /@tootallnate/once@2.0.0:
+    resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
+    engines: {node: '>= 10'}
+    dev: true
+
   /@trysound/sax@0.2.0:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
@@ -3646,6 +3651,12 @@ packages:
     resolution: {integrity: sha512-HC8G7c1WmaF2ekqpnFq626xd3Zz0uvaqFmBJNRZCGEZCXkvSdJoNFn/8Ygbd9fKNQj8UzLdCETaI0UWPAjK7IA==}
     dependencies:
       '@types/node': 18.14.2
+    dev: true
+
+  /@types/graceful-fs@4.1.6:
+    resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}
+    dependencies:
+      '@types/node': 18.7.1
     dev: true
 
   /@types/istanbul-lib-coverage@2.0.4:
@@ -4710,6 +4721,37 @@ packages:
     resolution: {integrity: sha512-mWEvCQTgXQf48yDqgN7CH50waTyYBeP2Lpqx4nNWab9sxEpdXVeKgfj1qYI2/TgUPQtNFZ85i3PemRtnXVYYJg==}
     dependencies:
       '@babel/helper-plugin-utils': 7.22.5
+    dev: true
+
+  /babel-preset-current-node-syntax@1.0.1(@babel/core@7.22.10):
+    resolution: {integrity: sha512-M7LQ0bxarkxQoN+vz5aJPsLBn77n8QgTFmo8WK0/44auK2xlCXrYcUxHFxgU7qW5Yzw/CjmLRK2uJzaCd7LvqQ==}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+    dependencies:
+      '@babel/core': 7.22.10
+      '@babel/plugin-syntax-async-generators': 7.8.4(@babel/core@7.22.10)
+      '@babel/plugin-syntax-bigint': 7.8.3(@babel/core@7.22.10)
+      '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.22.10)
+      '@babel/plugin-syntax-import-meta': 7.10.4(@babel/core@7.22.10)
+      '@babel/plugin-syntax-json-strings': 7.8.3(@babel/core@7.22.10)
+      '@babel/plugin-syntax-logical-assignment-operators': 7.10.4(@babel/core@7.22.10)
+      '@babel/plugin-syntax-nullish-coalescing-operator': 7.8.3(@babel/core@7.22.10)
+      '@babel/plugin-syntax-numeric-separator': 7.10.4(@babel/core@7.22.10)
+      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.22.10)
+      '@babel/plugin-syntax-optional-catch-binding': 7.8.3(@babel/core@7.22.10)
+      '@babel/plugin-syntax-optional-chaining': 7.8.3(@babel/core@7.22.10)
+      '@babel/plugin-syntax-top-level-await': 7.14.5(@babel/core@7.22.10)
+    dev: true
+
+  /babel-preset-jest@29.6.3(@babel/core@7.22.10):
+    resolution: {integrity: sha512-0B3bhxR6snWXJZtR/RliHTDPRgn1sNHOR0yVtq/IiQFyuOVjFS+wuio/R4gSNkyYmKmJB4wGZv2NZanmKmTnNA==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+    dependencies:
+      '@babel/core': 7.22.10
+      babel-plugin-jest-hoist: 29.6.3
+      babel-preset-current-node-syntax: 1.0.1(@babel/core@7.22.10)
     dev: true
 
   /babel-preset-current-node-syntax@1.0.1(@babel/core@7.22.10):
@@ -7052,7 +7094,7 @@ packages:
       array-union: 2.1.0
       dir-glob: 3.0.1
       fast-glob: 3.3.1
-      glob: 7.1.4
+      glob: 7.2.3
       ignore: 5.2.4
       merge2: 1.4.1
       slash: 3.0.0
@@ -9714,6 +9756,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.28
+      ts-node: 10.9.1(@swc/core@1.3.51)(@types/node@18.7.1)(typescript@5.1.6)
       yaml: 1.10.2
     dev: true
 
@@ -10639,7 +10682,7 @@ packages:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     hasBin: true
     dependencies:
-      glob: 7.1.4
+      glob: 7.2.3
     dev: true
 
   /rollup-plugin-copy@3.4.0:
@@ -10661,7 +10704,7 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /rollup-plugin-postcss@4.0.2(postcss@8.4.28):
+  /rollup-plugin-postcss@4.0.2(postcss@8.4.28)(ts-node@10.9.1):
     resolution: {integrity: sha512-05EaY6zvZdmvPUDi3uCcAQoESDcYnv8ogJJQRp6V5kZ6J6P7uAVJlrTZcaaA20wTH527YTnKfkAoPxWI/jPp4w==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -10674,7 +10717,7 @@ packages:
       p-queue: 6.6.2
       pify: 5.0.0
       postcss: 8.4.28
-      postcss-load-config: 3.1.4(postcss@8.4.28)
+      postcss-load-config: 3.1.4(postcss@8.4.28)(ts-node@10.9.1)
       postcss-modules: 4.3.1(postcss@8.4.28)
       promise.series: 0.2.0
       resolve: 1.22.4
