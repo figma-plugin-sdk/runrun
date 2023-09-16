@@ -125,10 +125,16 @@ a {
 }
 
 pre {
-  word-break: break-all;
-  word-wrap: break-word;
   border-radius: 4px;
+  /* overflow:scroll; */
+  width: auto; /* Adjust as needed */
+  max-width: 100%; /* Ensure it doesn't exceed its container */
+  /* overflow-x: auto; Enable horizontal scrolling if needed */
 }
+/* code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+} */
 
 .clearfix,
 .cf {
