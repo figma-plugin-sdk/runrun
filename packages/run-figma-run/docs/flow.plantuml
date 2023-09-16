@@ -1,0 +1,22 @@
+@startuml
+!define RECTANGLE class
+
+RECTANGLE TestRunner {
+  +addSuite()
+  +runTests()
+}
+RECTANGLE TestSuite {
+  +addTest()
+  +run()
+}
+RECTANGLE TestUnit {
+  +run()
+}
+
+TestRunner --> TestSuite : addSuite()
+TestRunner --> TestSuite : runTests()
+TestSuite --> TestSuite : addTest()
+TestSuite --> TestUnit : addTest()
+TestSuite --> TestUnit : run()
+TestUnit --> TestUnit : run()
+@enduml
