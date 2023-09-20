@@ -1,6 +1,8 @@
 import { Suite } from './Suite';
 import { FailureType, TestFn } from './types';
-import { TestStatus, TestResult } from './result';
+import { TestStatus, TestResult, createEmptyTestResult } from './result';
+import { Chronometer } from './Chronometer';
+import { wrapWithEnvInClosure } from './utils';
 
 export type UnitOptions = {
   skip?: boolean;
@@ -13,98 +15,55 @@ export class Unit {
     timeout: 5000,
   };
 
+  #result: TestResult;
+
+  public get result(): TestResult {
+    return this.#result;
+  }
+
   constructor(
-    public readonly name: string,
+    public readonly title: string,
     public readonly testFn: TestFn,
     public readonly scope: Suite,
     public readonly options: UnitOptions = Unit.DEFAULT_OPTIONS
   ) {
     scope.addUnit(this);
-  }
-
-  run(): TestResult {
-    try {
-      if (this.options.skip) {
-        return {
-          name: this.name,
-          scope: this.scope,
-          status: TestStatus.SKIPPED,
-        };
-      }
-
-      // Create a closure to provide appropriate
-      // test context functions
-      (() => {
-        const { fail } = ExecutionContext.For(this);
-        this.testFn();
-      })();
-
-      return {
-        name: this.name,
-        scope: this.scope,
-        failure: null,
-        status: TestStatus.PASSED,
-      };
-    } catch (e) {
-      return {
-        name: this.name,
-        scope: this.scope,
-        status: TestStatus.FAILED,
-        failure: {
-          expected: '', // Populate as needed
-          actual: '', // Populate as needed
-          context: e,
-        },
-      };
-    }
-  }
-
-  async run3(context: object = {}): Promise<TestRunResult> {
-    const result = new TestRunResult(this.name);
-    try {
-      this.fn.call(context);
-      result.results.push(new TestStatus(TestResult.PASSED));
-      result.stats.total++;
-      result.stats.passed++;
-      return result;
-    } catch (e) {
-      const status = new TestStatus(TestResult.FAILED, {
-        type: FailureType.EXCEPTION,
-        message: e.message,
-      });
-      result.results.push(status);
-      result.stats.total++;
-      result.stats.failed++;
-      return result;
-    }
+    this.#result = createEmptyTestResult(title);
   }
 
   async run4(
-    context: object = {},
-    enableMetrics: boolean
-  ): Promise<TestRunResult> {
-    const result = new TestRunResult(this.name);
-    const start = enableMetrics ? new Date().getTime() : 0;
+    context: Record<string, unknown>,
+    enableChronometer: boolean
+  ): Promise<TestResult> {
+    const chron = new Chronometer(enableChronometer);
+
     try {
-      this.fn.call(context);
-      const duration = enableMetrics ? new Date().getTime() - start : 0;
-      result.results.push(new TestStatus(TestResult.PASSED, duration));
-      if (enableMetrics) {
-        result.stats.tests++;
-        result.stats.passes++;
-      }
+      chron.start();
+
+      wrapWithEnvInClosure(this.testFn, context)();
+
+      chron.stop();
+
+      this.#result.status = TestStatus.PASSED;
+      this.result.start = chron.startTime;
+      this.result.end = chron.endTime;
+      this.result.duration = chron.getElapsedTime();
     } catch (e) {
-      const duration = enableMetrics ? new Date().getTime() - start : 0;
-      const status = new TestStatus(TestResult.FAILED, duration, {
-        type: FailureType.EXCEPTION,
-        message: e.message,
-      });
-      result.results.push(status);
-      if (enableMetrics) {
-        result.stats.tests++;
-        result.stats.failures++;
-      }
+      this.#result = {
+        title: this.title,
+        status: TestStatus.FAILED,
+        failure: {
+          type: FailureType.EXCEPTION,
+          message: e.message,
+          expected: '',
+          actual: '',
+        },
+        start: chron.startTime,
+        end: chron.endTime,
+        duration: chron.getElapsedTime(),
+      };
     }
-    return result;
+
+    return this.result;
   }
 }

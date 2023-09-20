@@ -1,57 +1,55 @@
-declare namespace MochaResult {
-  export interface TestSuite {
-    title: string;
-    suites: TestSuite[];
-    tests: TestResult[];
-    pending: string[]; // test's uuid
-    root: boolean;
-    _timeout: number;
-    file: string;
-    uuid: string;
-    beforeHooks: any[]; // aa
-    afterHooks: any[]; // aa
-    fullFile: string;
-    passes: any[];
-    failures: string[]; // test's uuid
-    skipped: string[]; // test's uuid
-    duration: number;
-    rootEmpty: boolean;
-  }
+export interface TestSuite {
+  title: string;
+  suites: TestSuite[];
+  tests: TestResult[];
+  pending: string[]; // test's uuid
+  root: boolean;
+  _timeout: number;
+  file: string;
+  uuid: string;
+  beforeHooks: any[]; // aa
+  afterHooks: any[]; // aa
+  fullFile: string;
+  passes: any[];
+  failures: string[]; // test's uuid
+  skipped: string[]; // test's uuid
+  duration: number;
+  rootEmpty: boolean;
+}
 
-  export interface TestResult {
-    title: string;
-    fullTitle: string;
-    timedOut: boolean;
-    duration: number;
-    state?: 'failed' | 'passed';
-    pass: boolean;
-    fail: boolean;
-    pending: boolean;
-    /**
-     * Example
-     * true.should.eql(bool);\nexp.should.eql({\n  foo: true,\n  bar: true,\n  baz: 1\n});\nshouldAddContext && addContext(this, 'context');",
-     */
-    code: string;
-    err: ErrorDetails;
-    uuid: string;
-    parentUUID: string;
-    isHook: boolean;
-    skipped: boolean;
-  }
+export interface TestResult {
+  title: string;
+  fullTitle: string;
+  timedOut: boolean;
+  duration: number;
+  state?: 'failed' | 'passed';
+  pass: boolean;
+  fail: boolean;
+  pending: boolean;
+  /**
+   * Example
+   * true.should.eql(bool);\nexp.should.eql({\n  foo: true,\n  bar: true,\n  baz: 1\n});\nshouldAddContext && addContext(this, 'context');",
+   */
+  code: string;
+  err: ErrorDetails;
+  uuid: string;
+  parentUUID: string;
+  isHook: boolean;
+  skipped: boolean;
+}
 
-  export interface ErrorDetails {
-    operator: string;
-    expected: string;
-    details: string;
-    showDiff: boolean;
-    actual: string;
-    negate: boolean;
-    assertion: ErrAssertion;
-    _message: string;
-    generatedMessage: boolean;
-    estack: string;
-    diff: string;
-  }
+export interface ErrorDetails {
+  operator: string;
+  expected: string;
+  details: string;
+  showDiff: boolean;
+  actual: string;
+  negate: boolean;
+  assertion: ErrAssertion;
+  _message: string;
+  generatedMessage: boolean;
+  estack: string;
+  diff: string;
 }
 
 export interface ErrAssertion {
@@ -89,7 +87,7 @@ export interface Result {
   rootEmpty: boolean;
 }
 
-export interface JSONData {
+export interface MochaResult {
   stats: Stats;
   results: Result[];
 }
@@ -111,5 +109,6 @@ export interface Stats {
   skipped: number;
   hasSkipped: boolean;
 }
-const json: JSONData;
+const json: MochaResult;
+
 export default json;

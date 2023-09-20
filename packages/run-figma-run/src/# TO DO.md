@@ -7,7 +7,7 @@
 - [x] utils.ts
 - [x] api.ts
 - [x] Runner.ts
-- [ ] Suite.ts
+- [x] Suite.ts
 - [ ] Unit.ts
 - [ ] step.ts
 - [ ] types.ts

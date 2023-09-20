@@ -59,7 +59,7 @@ export class Suite {
 
   addUnit(unit: Unit): void {
     this.children.push(unit);
-    this.result.stats.tests++;
+    this.result.stats.tests.registered++;
     this.result.stats.pending++;
   }
 
@@ -101,17 +101,37 @@ export class Suite {
    */
   async #runSuite(childSuite: Suite) {
     const childResults = await childSuite.run();
-    this.result.suiteResults.push(childResults);
 
-    this.result.stats.suites++;
-    this.result.stats.tests += childResults.stats.tests;
-    this.result.stats.pending += childResults.stats.pending;
-    this.result.stats.failures += childResults.stats.failures;
-    this.result.stats.passes += childResults.stats.passes;
+    const tests = this.result.stats.tests;
+    const childTests = childResults.stats.tests;
+
+    tests.registered += childTests.registered;
+    tests.pending -= childTests.executed;
+    tests.executed -= childTests.executed;
+    tests.failed += childTests.failed;
+    tests.passed += childTests.passed;
+    tests.skipped += childTests.skipped;
+    
+    this.result.stats.passPercent = tests.passed / tests.registered;
+    this.result.stats.executedPercent = tests.executed / tests.registered;
+
+    this.result.suiteResults.push(childResults);
   }
 
   /**
    * Runs the child test and updates the results properties
    */
-  async #runTest(test: Unit) {}
+  async #runTest(test: Unit) {
+    // Run test
+    const result = await test.run();
+    const tests = this.result.stats.tests;
+
+    // Increment tests counter
+    tests.executed++;
+    tests.pending--;
+    tests[result.status]++;
+
+    this.result.stats.passPercent = tests.passed / tests.registered;
+    this.result.stats.executedPercent = tests.executed / tests.registered;
+  }
 }
