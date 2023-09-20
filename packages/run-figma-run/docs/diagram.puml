@@ -1,0 +1,76 @@
+@startuml
+
+TestSuite --> SuiteOptions
+TestSuite --> Array
+TestSuite -- TestUnit
+TestResult --> TestSuite
+TestUnit --> TestUnitOptions
+TestUnit --> TestFunction
+TestUnitOptions <|-- SuiteOptions
+
+interface ExecutionContext {
+    +fail(message: string): void
+}
+
+TestRunner o-- TestSuite : suites
+TestRunner -- TestSuiteResult : run()
+
+'SuiteDefinitionFn
+'TestDefinitionFn
+
+class TestRunner {
+    +suites : TestSuite[]
+    +registerSuite(name: string, definition: SuiteDefinitionFn, options?: any): void
+    +registerTest(name: string, definition: TestDefinitionFn, options?: any): void
+    +run(): Promise<TestSuiteResult>
+}
+
+interface SuiteOptions {
+    +sequence : boolean
+    +story : boolean
+}
+
+class TestUnitOptions {
+
+}
+
+interface TestSuiteResult {
+    +successes : number
+    +failures : number
+    +results : TestResult[]
+}
+
+interface SuiteDefinitionFn {
+    +async(context: ExecutionContext): Promise<TestSuite>
+}
+
+class TestSuite {
+    +name : string
+    +scope : TestSuite | TestRunner
+    +options : SuiteOptions
+    +innerTests : Array<TestSuite | TestUnit>
+    +addTest(test: TestUnit | TestSuite): void
+    +run(context: ExecutionContext): Promise<TestSuiteResult>
+}
+
+interface TestFunction {
+    +async(context: ExecutionContext): Promise<TestUnit>
+}
+
+interface TestResult {
+    +name : string
+    +scope : TestSuite | TestRunner
+    +outcome : "success" | "failure" | "skipped"
+    +failure : TypeLiteral
+}
+
+interface TestDefinitionFn {}
+
+class TestUnit {
+    +name : string
+    +scope : TestSuite
+    +options : TestUnitOptions
+    +testFn : TestFunction
+    +run(context: ExecutionContext): TestResult
+}
+@enduml

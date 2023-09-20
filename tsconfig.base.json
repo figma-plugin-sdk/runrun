@@ -18,7 +18,9 @@
       "@cva/test-reporter-html": [
         "packages/reporters/test-reporter-html/src/index.js"
       ],
-      "packages/run-figma-run": ["packages/run-figma-run/src/index.ts"]
+      "@cva/run-figma-run": [
+        "packages/run-figma-run/src/index.ts"
+      ]
     }
   }
 }

@@ -20,7 +20,7 @@
       "defaultConfiguration": "development",
       "options": {
         "target": "web",
-        "outputPath": "dist/packages/reporters/test-reporter-html",
+        "outputPath": "packages/reporters/test-reporter-html/dist",
         "compiler": "swc",
         "watch": true,
         "main": "packages/reporters/test-reporter-html/src/client/js/mochawesome.js",

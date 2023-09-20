@@ -1,0 +1,17 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  '@cva/test-reporter-html':
+    specifier: file:../reporters/test-reporter-html
+    version: file:../reporters/test-reporter-html
+
+packages:
+
+  file:../reporters/test-reporter-html:
+    resolution: {directory: ../reporters/test-reporter-html, type: directory}
+    name: '@cva/test-reporter-html'
+    dev: false

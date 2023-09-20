@@ -1,0 +1,130 @@
+@startuml TestResultStructure
+
+title "Test Result Structure"
+
+JSONData *-- Stats : stats
+JSONData *-- Result : results
+
+interface JSONData{
+    +stats : Stats
+    +results : Result[]
+}
+
+interface Stats{
+    +suites : number
+    +tests : number
+    +passes : number
+    +pending : number
+    +failures : number
+    +start : string
+    +end : string
+    +duration : number
+    +testsRegistered : number
+    +passPercent : number
+    +pendingPercent : number
+    +other : number
+    +hasOther : boolean
+    +skipped : number
+    +hasSkipped : boolean
+}
+
+Result o-- TestSuite : suites
+Result o-- TestResult : tests
+
+interface Result{
+    +title : string
+    +suites : TestSuite[]
+    +tests : TestResult[]
+    +pending : string[]
+    +root : boolean
+    +_timeout : number
+    +uuid : string
+    +beforeHooks : any[]
+    +afterHooks : any[]
+    +fullFile : string
+    +file : string
+    +passes : string[]
+    +failures : string[]
+    +skipped : string[]
+    +duration : number
+    +rootEmpty : boolean
+}
+
+
+TestSuite o-- TestSuite : suites
+TestSuite *-- TestResult : tests
+
+interface TestSuite {
+    +title : string
+    +suites : TestSuite
+    +tests : TestResult[]
+    +pending : string[]
+    +root : boolean
+    +_timeout : number
+    +file : string
+    +uuid : string
+    +beforeHooks : any[]
+    +afterHooks : any[]
+    +fullFile : string
+    +passes : any[]
+    +failures : string[]
+    +skipped : string[]
+    +duration : number
+    +rootEmpty : boolean
+}
+
+TestResult "1" -- "0..1" ErrorDetails : err
+
+
+interface TestResult{
+    +title : string
+    +fullTitle : string
+    +timedOut : boolean
+    +duration : number
+    +state : 'failed' | 'passed'
+    +pass : boolean
+    +fail : boolean
+    +pending : boolean
+    +code : string
+    +err : ErrorDetails
+    +uuid : string
+    +parentUUID : string
+    +isHook : boolean
+    +skipped : boolean
+}
+
+ErrorDetails "1" -- "0..1" ErrAssertion : assertion
+
+interface ErrorDetails{
+    +operator : string
+    +expected : string
+    +details : string
+    +showDiff : boolean
+    +actual : string
+    +negate : boolean
+    +assertion : ErrAssertion
+    +_message : string
+    +generatedMessage : boolean
+    +estack : string
+    +diff : string
+}
+
+interface ErrAssertion {
+    +obj : Record<string, any>
+    +anyOne : boolean
+    +negate : boolean
+    +params : TypeLiteral
+    +light : boolean
+}
+
+interface ErrAssertionParams: {
+    +operator: string;
+    +expected: Record<string, any>;
+    +details: string;
+    +showDiff: boolean;
+    +actual: Record<string, any>;
+    +negate: boolean;
+    +assertion: ErrAssertion;
+}
+
+@enduml

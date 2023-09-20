@@ -10,8 +10,7 @@
       "options": {
         "outputPath": "dist/run-figma-run",
         "main": "packages/run-figma-run/src/index.ts",
-        "tsConfig": "packages/run-figma-run/tsconfig.lib.json",
-        "assets": ["*.md"]
+        "tsConfig": "packages/run-figma-run/tsconfig.lib.json"
       }
     },
     "lint": {

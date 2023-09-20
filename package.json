@@ -4,15 +4,19 @@
   "license": "MIT",
   "scripts": {
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "build:reporter": "pnpm nx run reporters-test-reporter-html:build",
+    "build:runner": "pnpm nx run run-figma-run:build"
   },
   "dependencies": {
     "@swc/helpers": "~0.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "ts-node": "^10.9.1",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@appland/appmap-agent-js": "^14.2.0",
     "@babel/core": "^7.14.5",
     "@babel/preset-react": "^7.14.5",
     "@nx/eslint-plugin": "16.7.4",

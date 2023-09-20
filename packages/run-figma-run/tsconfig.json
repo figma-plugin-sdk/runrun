@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "types": ["vitest"]
+    "types": [
+      "vitest"
+    ],
+    "lib": [
+      "DOM"
+    ]
   },
   "files": [],
   "include": [],
@@ -12,5 +17,10 @@
       "path": "./tsconfig.spec.json"
     }
   ],
+  "paths": {
+    "@cva/run-figma-run": [
+      "src/index.ts"
+    ]
+  },
   "extends": "../../tsconfig.base.json"
 }

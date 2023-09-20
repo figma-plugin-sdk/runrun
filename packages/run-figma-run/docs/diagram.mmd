@@ -1,0 +1,77 @@
+classDiagram
+
+    Suite --> SuiteOptions
+    Suite --> Array
+    Suite -- Unit
+    TestResult --> Suite
+    Unit --> TestUnitOptions
+    Unit --> TestFunction
+    TestUnitOptions <|-- SuiteOptions
+
+    class ExecutionContext
+
+    ExecutionContext {
+        <<interface>>
+        +fail(message: string): void
+    }
+%%
+%%    Runner o-- Suite : suites
+%%    Runner -- TestSuiteResult : run()
+%%    SuiteDefinitionFn
+%%    TestDefinitionFn
+%%
+%%    class Runner {
+%%    +suites : Suite[]
+%%    +registerSuite(name: string, definition: SuiteDefinitionFn, options?: any): void
+%%    +registerTest(name: string, definition: TestDefinitionFn, options?: any): void
+%%    +run(): Promise<TestSuiteResult>
+%%    }
+%%
+%%    interface SuiteOptions {
+%%    +sequence : boolean
+%%    +story : boolean
+%%    }
+%%
+%%    class TestUnitOptions {
+%%
+%%    }
+%%
+%%    interface TestSuiteResult {
+%%    +successes : number
+%%    +failures : number
+%%    +results : TestResult[]
+%%    }
+%%
+%%    interface SuiteDefinitionFn {
+%%    +async(context: ExecutionContext): Promise<Suite>
+%%    }
+%%
+%%    class Suite {
+%%    +name : string
+%%    +scope : Suite | Runner
+%%    +options : SuiteOptions
+%%    +innerTests : Array<Suite | Unit>
+%%    +addTest(test: Unit | Suite): void
+%%    +run(context: ExecutionContext): Promise<TestSuiteResult>
+%%    }
+%%
+%%    interface TestFunction {
+%%    +async(context: ExecutionContext): Promise<Unit>
+%%    }
+%%
+%%    interface TestResult {
+%%    +name : string
+%%    +scope : Suite | Runner
+%%    +outcome : "success" | "failure" | "skipped"
+%%    +failure : TypeLiteral
+%%    }
+%%
+%%    interface TestDefinitionFn {}
+%%
+%%    class Unit {
+%%    +name : string
+%%    +scope : Suite
+%%    +options : TestUnitOptions
+%%    +testFn : TestFunction
+%%    +run(context: ExecutionContext): TestResult
+%%    }
