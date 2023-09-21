@@ -4,6 +4,7 @@
   "scripts": {
     "stylelint": "stylelint src/**/*.css src/components/**/*.css --fix"
   },
+  "main": "./dist/main.js",
   "devDependencies": {
     "chartist": "^0.11.0",
     "classnames": "^2.2.5",

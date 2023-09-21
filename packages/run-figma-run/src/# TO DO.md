@@ -8,8 +8,7 @@
 - [x] api.ts
 - [x] Runner.ts
 - [x] Suite.ts
-- [ ] Unit.ts
+- [x] Unit.ts
+- [x] types.ts
 - [ ] step.ts
-- [ ] types.ts
-
 - [ ] Runner.test.ts

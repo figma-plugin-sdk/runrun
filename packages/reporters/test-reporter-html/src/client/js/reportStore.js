@@ -12,13 +12,13 @@ const transduce = (items, mapper, reducer, initial) =>
     initial
   );
 
-class ReportStore {
+export class ReportStore {
   constructor(data = {}) {
     Object.assign(this, {
       filters: ['showPassed', 'showFailed', 'showPending', 'showSkipped'],
       initialLoadTimeout: 300,
       initialFilterState: null,
-      reportTitle: 'Run-figma-run Report',
+      reportTitle: 'Run, Figma, run! Report',
       results: data.results || [],
       showHooksOptions: ['failed', 'always', 'never', 'context'],
       stats: data.stats || {},

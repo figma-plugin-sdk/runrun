@@ -1,0 +1,393 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "stats": {
+      "$ref": "#/definitions/Stats"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/SuiteResult"
+          },
+          {
+            "$ref": "#/definitions/TestResult"
+          }
+        ]
+      }
+    }
+  },
+  "required": ["stats", "results"],
+  "definitions": {
+    "Err": {
+      "type": "object",
+      "properties": {
+        "estack": { "type": "string" },
+        "negate": { "type": "boolean" },
+        "assertion": { "type": "object" },
+        "operator": { "type": "string" },
+        "expected": {},
+        "details": { "type": "string" },
+        "showDiff": { "type": "boolean" },
+        "actual": {},
+        "name": { "type": "string" },
+        "message": { "type": "string" },
+        "generatedMessage": { "type": "boolean" },
+        "diff": { "type": "string" }
+      },
+      "required": []
+    },
+    "AnyOneAssertion": {
+      "type": "object",
+      "properties": {
+        "obj": {},
+        "negate": {
+          "type": "boolean"
+        },
+        "params": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/AssertionParams"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "anyOne": {
+          "type": "boolean"
+        },
+        "light": {
+          "type": "boolean"
+        }
+      },
+      "required": ["obj", "negate", "params", "anyOne", "light"]
+    },
+    "AssertionParams": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "type": "string"
+        },
+        "expected": {},
+        "details": {
+          "type": "string"
+        },
+        "showDiff": {
+          "type": "boolean"
+        },
+        "actual": {},
+        "negate": {
+          "type": "boolean"
+        },
+        "assertion": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "operator",
+        "expected",
+        "details",
+        "showDiff",
+        "actual",
+        "negate",
+        "assertion"
+      ]
+    },
+    "HookResult": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "fullTitle": {
+          "type": "string"
+        },
+        "timedOut": {
+          "type": "boolean"
+        },
+        "duration": {
+          "type": "number"
+        },
+        "pass": {
+          "type": "boolean"
+        },
+        "fail": {
+          "type": "boolean"
+        },
+        "pending": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "string"
+        },
+        "err": {
+          "$ref": "#/definitions/Err"
+        },
+        "uuid": {
+          "type": "string"
+        },
+        "parentUUID": {
+          "type": "string"
+        },
+        "isHook": {
+          "type": "boolean"
+        },
+        "skipped": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "title",
+        "fullTitle",
+        "timedOut",
+        "duration",
+        "pass",
+        "fail",
+        "pending",
+        "code",
+        "err",
+        "uuid",
+        "parentUUID",
+        "isHook",
+        "skipped"
+      ]
+    },
+    "TestResult": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "fullTitle": {
+          "type": "string"
+        },
+        "timedOut": {
+          "type": "boolean"
+        },
+        "duration": {
+          "type": "number"
+        },
+        "state": {
+          "type": "string",
+          "enum": ["failed", "passed"]
+        },
+        "speed": {
+          "type": "string",
+          "enum": ["fast", "medium"]
+        },
+        "pass": {
+          "type": "boolean"
+        },
+        "fail": {
+          "type": "boolean"
+        },
+        "pending": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "string"
+        },
+        "err": {
+          "$ref": "#/definitions/Err"
+        },
+        "uuid": {
+          "type": "string"
+        },
+        "parentUUID": {
+          "type": "string"
+        },
+        "isHook": {
+          "type": "boolean"
+        },
+        "skipped": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "title",
+        "fullTitle",
+        "timedOut",
+        "duration",
+        "pass",
+        "fail",
+        "pending",
+        "code",
+        "err",
+        "uuid",
+        "parentUUID",
+        "skipped"
+      ]
+    },
+    "SuiteResult": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "suites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SuiteResult"
+          }
+        },
+        "tests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TestResult"
+          }
+        },
+        "pending": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "root": {
+          "type": "boolean"
+        },
+        "_timeout": {
+          "type": "number"
+        },
+        "file": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string"
+        },
+        "beforeHooks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TestResult"
+          }
+        },
+        "afterHooks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TestResult"
+          }
+        },
+        "fullFile": {
+          "type": "string"
+        },
+        "passes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipped": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "duration": {
+          "type": "number"
+        },
+        "rootEmpty": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "title",
+        "suites",
+        "tests",
+        "pending",
+        "root",
+        "_timeout",
+        "file",
+        "uuid",
+        "fullFile",
+        "passes",
+        "failures",
+        "skipped",
+        "duration"
+      ]
+    },
+    "Stats": {
+      "type": "object",
+      "properties": {
+        "suites": {
+          "type": "number"
+        },
+        "tests": {
+          "type": "number"
+        },
+        "passes": {
+          "type": "number"
+        },
+        "pending": {
+          "type": "number"
+        },
+        "failures": {
+          "type": "number"
+        },
+        "start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "duration": {
+          "type": "number"
+        },
+        "testsRegistered": {
+          "type": "number"
+        },
+        "passPercent": {
+          "type": "number"
+        },
+        "pendingPercent": {
+          "type": "number"
+        },
+        "other": {
+          "type": "number"
+        },
+        "hasOther": {
+          "type": "boolean"
+        },
+        "skipped": {
+          "type": "number"
+        },
+        "hasSkipped": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "suites",
+        "tests",
+        "passes",
+        "pending",
+        "failures",
+        "start",
+        "end",
+        "duration",
+        "testsRegistered",
+        "passPercent",
+        "pendingPercent",
+        "other",
+        "hasOther",
+        "skipped",
+        "hasSkipped"
+      ]
+    }
+  }
+}
