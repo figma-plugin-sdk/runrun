@@ -1,0 +1,3 @@
+[submodule "examples/figma"]
+	path = examples/figma
+	url = git@github.com:cva-plugin/plugin-samples.git
