@@ -1,3 +1,4 @@
+import * as UUID from 'pure-uuid';
 import { Suite } from '../Suite';
 
 export enum TestStatus {
@@ -50,10 +51,12 @@ export enum FailureType {
 }
 
 export type TestResult = {
+  id: string;
   title: string;
   status: TestStatus;
   failure: null | {
     type: FailureType;
+    errorObj: Error;
     message: string;
     expected: unknown | null;
     actual: unknown | null;
@@ -67,6 +70,8 @@ export type TestResult = {
 };
 
 export type SuiteResult = {
+  id: string;
+  title: string;
   suites: SuiteResult[];
   tests: TestResult[];
   stats: Stats;
@@ -79,6 +84,7 @@ export type RunRunReport = Omit<SuiteResult, 'isRoot'> & {
 
 export function createEmptyTestResult(title: string = ''): TestResult {
   return {
+    id: new UUID(4).format(),
     title,
     status: TestStatus.PENDING,
     failure: null,
@@ -100,6 +106,8 @@ export function createEmptySuiteResult(suite: Suite): SuiteResult {
     );
 
   return {
+    id: new UUID(4).format(),
+    title: suite.title,
     isRoot: false,
     suites: [],
     tests: [],
@@ -121,11 +129,3 @@ export function createEmptySuiteResult(suite: Suite): SuiteResult {
     },
   };
 }
-
-// export interface SuiteResult {
-//   failures: number;
-//   successes: number;
-//   skips: number;
-//   suiteResults: SuiteResult[];
-//   testResults: TestResult[];
-// }

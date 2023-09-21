@@ -97,8 +97,8 @@ export interface SuiteResult {
   _timeout: number;
   file: string;
   uuid: string;
-  beforeHooks: TestResult[];
-  afterHooks: TestResult[];
+  beforeHooks: HookResult[];
+  afterHooks: HookResult[];
   fullFile: string;
   passes: string[]; // Array of GUIDs
   failures: string[]; // Array of GUIDs

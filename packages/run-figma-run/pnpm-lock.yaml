@@ -9,7 +9,17 @@ dependencies:
     specifier: file:../reporters/test-reporter-html
     version: file:../reporters/test-reporter-html
 
+devDependencies:
+  pure-uuid:
+    specifier: ^1.8.1
+    version: 1.8.1
+
 packages:
+
+  /pure-uuid@1.8.1:
+    resolution: {integrity: sha512-PIwHXU7NZb/wTBwUfzCSjI85tfwx6DQOm74sRLtNLH8KHsFZEvAQbBQdz7E5ij8SNSv9WGdQPWiiM6NpNIeNfA==}
+    engines: {node: '>=8.0.0'}
+    dev: true
 
   file:../reporters/test-reporter-html:
     resolution: {directory: ../reporters/test-reporter-html, type: directory}
