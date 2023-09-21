@@ -5,9 +5,12 @@
     ],
     "lib": [
       "DOM"
-    ]
+    ],
+    "declaration": true
   },
-  "files": [],
+  "files": [
+    "src/index.ts"
+  ],
   "include": [],
   "references": [
     {

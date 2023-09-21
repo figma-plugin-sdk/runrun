@@ -1,5 +1,4 @@
 import { Suite } from '../Suite';
-import { FailureType } from '../types';
 
 export enum TestStatus {
   PASSED = 'passed',
@@ -44,6 +43,11 @@ export type Stats = {
   /** The duration of the test suite execution in milliseconds. Will be null if not yet run. */
   duration: number | null;
 };
+
+export enum FailureType {
+  ASSERTION,
+  EXCEPTION,
+}
 
 export type TestResult = {
   title: string;
@@ -96,6 +100,7 @@ export function createEmptySuiteResult(suite: Suite): SuiteResult {
     );
 
   return {
+    isRoot: false,
     suites: [],
     tests: [],
     stats: {
@@ -116,3 +121,11 @@ export function createEmptySuiteResult(suite: Suite): SuiteResult {
     },
   };
 }
+
+// export interface SuiteResult {
+//   failures: number;
+//   successes: number;
+//   skips: number;
+//   suiteResults: SuiteResult[];
+//   testResults: TestResult[];
+// }

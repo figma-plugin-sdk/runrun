@@ -21,7 +21,7 @@ export class Runner {
     definition: SuiteCallback,
     options?: SuiteOptions
   ): Suite {
-    const newSuite = new Suite(name, definition, this.rootSuite, options);
+    const newSuite = new Suite(name, definition, Runner.instance.rootSuite, options);
     const defineSuite = wrapWithEnvInClosure(
       definition,
       createSuiteCtx(newSuite)

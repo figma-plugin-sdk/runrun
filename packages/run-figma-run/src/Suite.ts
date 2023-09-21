@@ -29,8 +29,6 @@ export class Suite {
 
   public readonly children: Array<Suite | Unit> = [];
 
-  #executionContext: Record<string, unknown>;
-
   public get suites(): Suite[] {
     return this.children.filter((c): c is Suite => c instanceof Suite);
   }
@@ -56,13 +54,13 @@ export class Suite {
   addSuite(suite: Suite): void {
     this.children.push(suite);
     this.result.stats.suites++;
-    this.result.stats.pending++;
+    this.result.stats.tests.pending++;
   }
 
   addUnit(unit: Unit): void {
     this.children.push(unit);
     this.result.stats.tests.registered++;
-    this.result.stats.pending++;
+    this.result.stats.tests.pending++;
   }
 
   async run(): Promise<SuiteResult> {

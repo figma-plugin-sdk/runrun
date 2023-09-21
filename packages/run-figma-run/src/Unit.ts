@@ -1,6 +1,11 @@
 import { Suite } from './Suite';
-import { FailureType, TestFn } from './types';
-import { TestStatus, TestResult, createEmptyTestResult } from './report';
+import { TestFn } from './types';
+import {
+  TestStatus,
+  TestResult,
+  createEmptyTestResult,
+  FailureType,
+} from './report';
 import { Chronometer } from './Chronometer';
 import { wrapWithEnvInClosure } from './utils';
 import { createUnitRunContext } from './contexts';
