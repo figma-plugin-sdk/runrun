@@ -54,24 +54,14 @@ export function createSuiteCtx(suite: Suite) {
   return env;
 }
 
-// Modified describe function to add root suites to the TestRunner
-export function createDeclarationContext(
-  title: string,
-  definition: SuiteCallback,
-  scope: Suite
-): void {
-  const suite = new Suite(title, definition, scope);
-  wrapWithEnvInClosure(definition, createSuiteCtx(suite));
-}
+export function createUnitRunContext(task: Unit, useWorkers: boolean = false) {
+  const testCtx = {
+    suite: task.scope,
 
-const testCtx = {
-  fail(message: string): void {
-    throw new Error(`Test failed: ${message}`);
-  },
-};
+    fail(message: string): void {
+      throw new Error(`Test failed: ${message}`);
+    },
+  };
 
-export function createTestContext(task: Task, useWorkers: boolean = false) {
-  return useWorkers
-    ? wrapWithEnvInWorkerCode(task, testCtx)
-    : wrapWithEnvInClosure(task, testCtx);
+  return testCtx;
 }

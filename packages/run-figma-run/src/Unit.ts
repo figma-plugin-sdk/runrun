@@ -1,8 +1,9 @@
 import { Suite } from './Suite';
 import { FailureType, TestFn } from './types';
-import { TestStatus, TestResult, createEmptyTestResult } from './result';
+import { TestStatus, TestResult, createEmptyTestResult } from './report';
 import { Chronometer } from './Chronometer';
 import { wrapWithEnvInClosure } from './utils';
+import { createUnitRunContext } from './contexts';
 
 export type UnitOptions = {
   skip?: boolean;
@@ -31,16 +32,13 @@ export class Unit {
     this.#result = createEmptyTestResult(title);
   }
 
-  async run4(
-    context: Record<string, unknown>,
-    enableChronometer: boolean
-  ): Promise<TestResult> {
+  async run(enableChronometer: boolean): Promise<TestResult> {
     const chron = new Chronometer(enableChronometer);
 
     try {
       chron.start();
 
-      wrapWithEnvInClosure(this.testFn, context)();
+      wrapWithEnvInClosure(this.testFn, createUnitRunContext(this))();
 
       chron.stop();
 

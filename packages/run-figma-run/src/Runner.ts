@@ -1,5 +1,5 @@
 import { Suite, SuiteOptions } from './Suite';
-import { SuiteResult } from './result';
+import { RunRunReport, SuiteResult } from './report';
 import { Unit, UnitOptions } from './Unit';
 import { rootCtx, createSuiteCtx } from './contexts';
 import { SuiteCallback, TestFn } from './types';
@@ -41,7 +41,10 @@ export class Runner {
     return new Unit(name, definition, scope, options);
   }
 
-  public async run(): Promise<SuiteResult> {
-    return await this.rootSuite.run(rootCtx);
+  public run(): Promise<RunRunReport> {
+    return this.rootSuite.run().then<RunRunReport>((res) => ({
+      ...res,
+      isRoot: true,
+    }));
   }
 }

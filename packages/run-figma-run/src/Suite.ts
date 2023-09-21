@@ -1,7 +1,7 @@
-import { ExecutionContext } from './contexts';
+import { ExecutionContext, createUnitRunContext } from './contexts';
 import { Runner } from './Runner';
 import { Unit } from './Unit';
-import { SuiteResult, TestResult, createEmptySuiteResult } from './result';
+import { SuiteResult, TestResult, createEmptySuiteResult } from './report';
 import { SuiteCallback } from './types';
 
 export type SuiteOptions = {
@@ -28,6 +28,8 @@ export class Suite {
   public readonly result: SuiteResult;
 
   public readonly children: Array<Suite | Unit> = [];
+
+  #executionContext: Record<string, unknown>;
 
   public get suites(): Suite[] {
     return this.children.filter((c): c is Suite => c instanceof Suite);
@@ -111,11 +113,11 @@ export class Suite {
     tests.failed += childTests.failed;
     tests.passed += childTests.passed;
     tests.skipped += childTests.skipped;
-    
+
     this.result.stats.passPercent = tests.passed / tests.registered;
     this.result.stats.executedPercent = tests.executed / tests.registered;
 
-    this.result.suiteResults.push(childResults);
+    this.result.suites.push(childResults);
   }
 
   /**
@@ -123,7 +125,7 @@ export class Suite {
    */
   async #runTest(test: Unit) {
     // Run test
-    const result = await test.run();
+    const result = await test.run(false);
     const tests = this.result.stats.tests;
 
     // Increment tests counter

@@ -1,5 +1,5 @@
 {
-  "$schema": "./MochawesomeReport.schema.json",
+  "$schema": "../../../src/report/MochawesomeReport.schema.json",
   "stats": {
     "suites": 6,
     "tests": 10,
