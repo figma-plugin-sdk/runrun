@@ -9,6 +9,7 @@ import {
 import { Chronometer } from './Chronometer';
 import { wrapWithEnvInClosure } from './utils';
 import { createUnitRunContext } from './contexts';
+import UUID = require('pure-uuid');
 
 export type UnitOptions = {
   skip?: boolean;
@@ -53,10 +54,12 @@ export class Unit {
       this.result.duration = chron.getElapsedTime();
     } catch (e) {
       this.#result = {
+        id: new UUID(4).format(),
         title: this.title,
         status: TestStatus.FAILED,
         failure: {
           type: FailureType.EXCEPTION,
+          object: e,
           message: e.message,
           expected: '',
           actual: '',

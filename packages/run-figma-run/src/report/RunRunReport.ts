@@ -50,17 +50,19 @@ export enum FailureType {
   EXCEPTION,
 }
 
+export type Failure = {
+  type: FailureType;
+  object: Error;
+  message: string;
+  expected: unknown | null;
+  actual: unknown | null;
+};
+
 export type TestResult = {
   id: string;
   title: string;
   status: TestStatus;
-  failure: null | {
-    type: FailureType;
-    errorObj: Error;
-    message: string;
-    expected: unknown | null;
-    actual: unknown | null;
-  };
+  failure: null | Failure;
   /** The start date and time of the test suite execution. Will be null if not yet run. */
   start: number | null;
   /** The end date and time of the test suite execution. Will be null if not yet run. */

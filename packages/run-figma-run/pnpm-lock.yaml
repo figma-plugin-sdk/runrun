@@ -8,6 +8,9 @@ dependencies:
   '@cva/test-reporter-html':
     specifier: file:../reporters/test-reporter-html
     version: file:../reporters/test-reporter-html
+  tslib:
+    specifier: ^2.6.2
+    version: 2.6.2
 
 devDependencies:
   pure-uuid:
@@ -20,6 +23,10 @@ packages:
     resolution: {integrity: sha512-PIwHXU7NZb/wTBwUfzCSjI85tfwx6DQOm74sRLtNLH8KHsFZEvAQbBQdz7E5ij8SNSv9WGdQPWiiM6NpNIeNfA==}
     engines: {node: '>=8.0.0'}
     dev: true
+
+  /tslib@2.6.2:
+    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+    dev: false
 
   file:../reporters/test-reporter-html:
     resolution: {directory: ../reporters/test-reporter-html, type: directory}

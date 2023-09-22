@@ -8,6 +8,8 @@
 		"liveServer.settings.port": 5501,
 		"jest.disabledWorkspaceFolders": [],
 		"cSpell.words": [
+			"estack",
+			"Mochawesome",
 			"runrun"
 		]
 	}

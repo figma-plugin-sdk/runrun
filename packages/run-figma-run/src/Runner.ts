@@ -12,16 +12,22 @@ export class Runner {
     return Runner.#instance ?? (Runner.#instance = new Runner());
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   private rootSuite: Suite = new Suite('root', () => {}, Runner.instance);
 
-  constructor() {}
+  private constructor() {}
 
   public static describe(
     name: string,
     definition: SuiteCallback,
     options?: SuiteOptions
   ): Suite {
-    const newSuite = new Suite(name, definition, Runner.instance.rootSuite, options);
+    const newSuite = new Suite(
+      name,
+      definition,
+      Runner.instance.rootSuite,
+      options
+    );
     const defineSuite = wrapWithEnvInClosure(
       definition,
       createSuiteCtx(newSuite)

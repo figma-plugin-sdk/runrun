@@ -37,9 +37,6 @@ export class Suite {
     return this.children.filter((c): c is Unit => c instanceof Unit);
   }
 
-  readonly describe = this.addSuite;
-  readonly it = this.addUnit;
-
   static DEFAULT_OPTIONS: SuiteOptions = DEFAULT_OPTIONS;
 
   constructor(

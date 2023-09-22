@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceRoot": "./src",
+    "baseUrl": "./src",
     "types": [
       "vitest"
     ],
@@ -8,21 +12,16 @@
     ],
     "declaration": true
   },
-  "files": [
-    "src/index.ts"
-  ],
+  "files": [],
   "include": [],
   "references": [
     {
       "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
     }
   ],
   "paths": {
     "@cva/run-figma-run": [
-      "src/index.ts"
+      "./src/index.ts"
     ]
   },
   "extends": "../../tsconfig.base.json"
