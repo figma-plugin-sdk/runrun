@@ -61,6 +61,7 @@ export type Failure = {
 export type TestResult = {
   id: string;
   title: string;
+  code: string;
   status: TestStatus;
   failure: null | Failure;
   /** The start date and time of the test suite execution. Will be null if not yet run. */
@@ -93,6 +94,7 @@ export function createEmptyTestResult(title: string = ''): TestResult {
     start: null,
     end: null,
     duration: null,
+    code: '',
   };
 }
 

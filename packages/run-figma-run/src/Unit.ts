@@ -48,6 +48,7 @@ export class Unit {
 
       chron.stop();
 
+      this.#result.code = this.testFn.toString();
       this.#result.status = TestStatus.PASSED;
       this.result.start = chron.startTime;
       this.result.end = chron.endTime;
@@ -56,6 +57,7 @@ export class Unit {
       this.#result = {
         id: new UUID(4).format(),
         title: this.title,
+        code: this.testFn.toString(),
         status: TestStatus.FAILED,
         failure: {
           type: FailureType.EXCEPTION,
