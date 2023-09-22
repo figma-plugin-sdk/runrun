@@ -58,8 +58,7 @@ export interface TestResult {
   fullTitle: string;
   timedOut: boolean;
   duration: number;
-  state: TestState; // Using the TestState type
-  speed: TestSpeed; // Using the TestSpeed type
+  speed?: TestSpeed; // Using the TestSpeed type
   pass: boolean;
   fail: boolean;
   pending: boolean;
@@ -109,5 +108,5 @@ export interface SuiteResult {
 
 export interface MochawesomeReport {
   stats: Stats;
-  results: Array<SuiteResult | TestResult>;
+  results: SuiteResult[];
 }
