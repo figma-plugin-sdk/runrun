@@ -1,7 +1,16 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"name": "🚀 webpack-react",
+			"path": "examples/figma/webpack-react-tests"
+		},
+		{
+			"name": "📦 @cva/test-reporter-html",
+			"path": "packages/reporters/test-reporter-html"
+		},
+		{
+			"name": "📦 @cva/run-figma-run",
+			"path": "packages/run-figma-run"
 		}
 	],
 	"settings": {

@@ -5,7 +5,8 @@
     "sourceRoot": "./src",
     "baseUrl": "./src",
     "types": [
-      "vitest"
+      "bun-types",
+      "@figma/plugin-typings"
     ],
     "lib": [
       "DOM"
@@ -20,9 +21,6 @@
     }
   ],
   "paths": {
-    "@cva/run-figma-run": [
-      "./src/index.ts"
-    ]
   },
   "extends": "../../tsconfig.base.json"
 }

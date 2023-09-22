@@ -18,6 +18,8 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
+    "@figma/plugin-typings": "^1.78.0",
+    "bun-types": "^1.0.3",
     "pure-uuid": "^1.8.1"
   }
 }

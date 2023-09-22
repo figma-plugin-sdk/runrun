@@ -1,10 +1,13 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src",
+    "rootDir": "./src",
     "jsx": "react-jsx",
     "allowJs": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
-    "strict": false
+    "strict": false,
+    "declaration": true
   },
   "files": [],
   "include": [],

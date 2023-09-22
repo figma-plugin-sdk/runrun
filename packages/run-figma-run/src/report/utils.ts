@@ -32,24 +32,6 @@ const stripAnsi = require('strip-ansi');
 const stripFnStart = require('./stripFnStart');
 
 /**
- * Logger utility
- *
- * @param {String} msg - message to log
- * @param {String} level - log level [log, info, warn, error]
- * @param {Object} config - configuration object
- */
-function log(msg, level, config) {
-  // Don't log messages in quiet mode
-  if (config && config.quiet) return;
-  const logMethod = console[level] || console.log;
-  let out = msg;
-  if (typeof msg === 'object') {
-    out = stringify(msg, null, 2);
-  }
-  logMethod(`[${chalk.gray('mochawesome')}] ${out}\n`);
-}
-
-/**
  * Strip the function definition from `str`,
  * and re-indent for pre whitespace.
  *
@@ -301,7 +283,6 @@ function mapSuites(suite, testTotals, config) {
 }
 
 module.exports = {
-  log,
   cleanCode,
   cleanTest,
   cleanSuite,
