@@ -56,6 +56,7 @@ export type Failure = {
   message: string;
   expected: unknown | null;
   actual: unknown | null;
+  diff: string | null;
 };
 
 export type TestResult = {

@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b tsconfig.lib.json"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -11,6 +14,7 @@
   },
   "dependencies": {
     "@cva/test-reporter-html": "file:../reporters/test-reporter-html",
+    "diff": "^5.1.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
