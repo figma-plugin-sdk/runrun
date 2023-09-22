@@ -4,7 +4,7 @@ import type {
   TestResult as MochawesomeTestResult,
   Err,
 } from './MochawesomeReport';
-import { RunRunReport, SuiteResult, TestResult } from './RunRunReport';
+import { Failure, RunRunReport, SuiteResult, TestResult } from './RunRunReport';
 
 export default function mapResultToMocha(
   report: RunRunReport
@@ -27,21 +27,21 @@ export default function mapResultToMocha(
       skipped: report.stats.tests.skipped,
       hasSkipped: report.stats.tests.skipped > 0 ? true : false,
     },
-    results: {
-      suites: mapSuites(report.suites, report.title),
-      tests: mapTests(report.tests, report.id, report.title).all,
-    },
+    results: mapSuites(report.suites, report.title),
   };
   return mochaAwesomeReport;
 }
 
-function mapSuites(suites: SuiteResult[], parentPath: string): MochawesomeSuiteResult[] {
+function mapSuites(
+  suites: SuiteResult[],
+  parentPath: string
+): MochawesomeSuiteResult[] {
   return suites.map((suite) => {
     const mochaSuites = mapSuites(suite.suites, parentPath);
     const mochaTests = mapTests(suite.tests, suite.id, suite.title);
 
     const mochaSuite: MochawesomeSuiteResult = {
-      title: (parentPath + ' ' +suite.title).trim(),
+      title: (parentPath + ' ' + suite.title).trim(),
       suites: mochaSuites, // Recursive definition
       tests: mochaTests.all,
       pending: mochaTests.pending,
@@ -81,8 +81,8 @@ function mapTests(tests: TestResult[], parentUUID: string, parentPath: string) {
       pass: test.status == 'passed' ? true : false,
       fail: test.status == 'failed' ? true : false,
       pending: test.status == 'pending' ? true : false,
-      code: '', //todo: verify
-      err: mapError(test), // Using the Err type we defined earlier
+      code: test.code,
+      err: mapError(test.failure), // Using the Err type we defined earlier
       uuid: test.id,
       parentUUID,
       isHook: false,
@@ -103,18 +103,21 @@ function mapTests(tests: TestResult[], parentUUID: string, parentPath: string) {
     pending,
   };
 }
-function mapError(test: TestResult): Err {
+function mapError(failure: Failure | null): Err {
+  if (failure == null) {
+    return null;
+  }
   const mochaError: Err = {
-    estack: test.failure., //todo: verify
+    estack: failure.object.stack, //todo: verify
     negate: false,
-    assertion: {}, //object | AnyOneAssertion, //todo: i don't know what to do aaaa
+    assertion: failure.object,
     // operator?: string;
-    expected: test.failure.expected,
+    expected: failure.expected,
     // details?: string;
     // showDiff?: boolean;
-    actual: test.failure.actual,
+    actual: failure.actual,
     // name?: string;
-    message: test.failure.message,
+    message: failure.message,
     // generatedMessage?: boolean;
     // diff?: string;
   };
