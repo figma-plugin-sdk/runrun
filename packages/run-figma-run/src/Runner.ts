@@ -1,11 +1,11 @@
 import { Suite, SuiteOptions } from './Suite';
-import { RunRunReport, SuiteResult } from './report';
+import { RunRunReport, mapResultToMocha } from './report';
 import { Unit, UnitOptions } from './Unit';
-import { rootCtx, createSuiteCtx } from './contexts';
+import { createSuiteCtx } from './contexts';
 import { SuiteCallback, TestFn } from './types';
-import { wrapWithEnvInClosure } from './utils';
+import { runWithEnv } from './utils';
 
-const reporterHtml = require('@cva/test-reporter-html/dist/index.html');
+// const reporterHtml = require('@cva/test-reporter-html/dist/index.html');
 
 export class Runner {
   static #instance: Runner;
@@ -15,7 +15,7 @@ export class Runner {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private rootSuite: Suite = new Suite('root', () => {}, Runner.instance);
+  private rootSuite: Suite = new Suite('root', () => {}, null);
 
   private constructor() {}
 
@@ -24,18 +24,18 @@ export class Runner {
     definition: SuiteCallback,
     options?: SuiteOptions
   ): Suite {
-    const newSuite = new Suite(
-      name,
-      definition,
-      Runner.instance.rootSuite,
-      options
-    );
-    const defineSuite = wrapWithEnvInClosure(
+    console.log('Runner.describe', name, definition, options);
+    const newSuite =
+      new Suite(
+        name,
+        definition,
+        Runner.instance.rootSuite,
+        options);
+
+    runWithEnv(
       definition,
       createSuiteCtx(newSuite)
     );
-
-    defineSuite();
 
     return newSuite;
   }
@@ -50,14 +50,14 @@ export class Runner {
   }
 
   public async run(): Promise<RunRunReport> {
-    figma.showUI(reporterHtml, { themeColors: true, height: 300 });
+    console.log('RUNNER before running', this);
 
     const result = await this.rootSuite.run().then<RunRunReport>((res) => ({
       ...res,
       isRoot: true,
     }));
 
-    figma.ui.postMessage(result);
+    figma.ui.postMessage(mapResultToMocha(result));
 
     return result;
   }

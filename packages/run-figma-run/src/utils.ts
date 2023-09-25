@@ -102,14 +102,26 @@ export function wrapWithEnvInWorkerCode(
  * @param env The environment object to be injected into the closure
  */
 export function wrapWithEnvInClosure(task: Task, env: Record<string, unknown>) {
-  return function () {
+  return function ClosureForEnv() {
     // Clone env to prevent any side effects
     const clonedEnv = { ...env };
+    const describe = clonedEnv.describe;
+    const it = clonedEnv.it;
 
+    console.log('Enclosing', task, clonedEnv);
+    
     // Merge env properties to 'this' within the function
+    // console.log('Assigning ', clonedEnv, ' to ', ClosureForEnv);
     Object.assign(this, clonedEnv);
 
     // Run the task function
-    return task.apply(this);
+    console.log('TASK', task);
+    task.apply(this)();
   };
+}
+
+export function runWithEnv(task: Task, env: Record<string, unknown>) {
+  console.log('running with env', task, env);
+  const wrapped = wrapWithEnvInClosure(task, env);
+  return new wrapped();
 }

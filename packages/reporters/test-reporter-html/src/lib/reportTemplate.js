@@ -5,13 +5,13 @@ function e(str) {
 }
 
 export function ReportTemplate(reportData) {
-  const bodyEl = document.querySelector('body');
-  bodyEl
-  const data = e(JSON.stringify(reportData));
+  // const bodyEl = document.querySelector('body');
+  // const data = e(JSON.stringify(reportData));
+  // console.log("data", data)
 
-  bodyEl.setAttribute('data-raw', data);
+  // bodyEl.setAttribute('data-raw', data);
 
-  return data;
+  // return data;
 }
 
 export default ReportTemplate;

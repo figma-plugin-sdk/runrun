@@ -23,13 +23,110 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-const isEmpty = require('lodash.isempty');
+// const isEmpty = require('lodash.isempty');
 const uuid = require('pure-uuid');
-const mochaUtils = require('mocha/lib/utils');
+const mochawesomeUtils = require('./mochawesomeUtils');
 const stringify = require('json-stringify-safe');
 const diff = require('diff');
 const stripAnsi = require('strip-ansi');
-const stripFnStart = require('./stripFnStart');
+
+function isEmpty(value) {
+  // Check for null or undefined
+  if (value == null) {
+    return true;
+  }
+
+  // Check for array-like values
+  if (Array.isArray(value) || typeof value == 'string' ||
+        (typeof value === 'object' && value !== null && typeof value.splice === 'function')) {
+    return !value.length;
+  }
+
+  // Check for Buffers and TypedArrays, but we'll ignore these for simplicity as they are Node.js specific or need more complex checks
+  // If you need these checks, you can include them specifically
+
+  // Check for arguments object
+  if (typeof arguments !== 'undefined' && value === arguments) {
+    return !value.length;
+  }
+
+  // Check for maps and sets by checking the presence of 'size' property (simplistic)
+  if (value.size !== undefined) {
+    return !value.size;
+  }
+
+  // Check for objects with own properties
+  for (var key in value) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+/* eslint-disable consistent-return */
+/**
+ * Strip start of function
+ *
+ * @param {string} input
+ *
+ * @return {string}
+ */
+function stripFunctionStart(input) {
+  const BEGIN = 1;
+  const LBRACE = 2;
+  const EQ = 4;
+  const ARROW = 8;
+  const ARROW_LBRACE = 16;
+  const ARROW_PAREN = 32;
+  const DONE = 64;
+
+  const isWhitespace = ch => ch === ' ' || ch === '\t' || ch === '\n';
+
+  const nextState = (state, c) => {
+    switch (state) {
+      case BEGIN:
+        switch (c) {
+          case '{':
+            return LBRACE;
+          case '=':
+            return EQ;
+          default:
+            return BEGIN;
+        }
+
+      case LBRACE:
+        return c === ' ' ? LBRACE : DONE;
+
+      case EQ:
+        return c === '>' ? ARROW : BEGIN;
+
+      case ARROW:
+        if (isWhitespace(c)) return ARROW;
+        switch (c) {
+          case '{':
+            return ARROW_LBRACE;
+          case '(':
+            return ARROW_PAREN;
+          default:
+            return DONE;
+        }
+
+      case ARROW_LBRACE:
+      case ARROW_PAREN:
+        return DONE;
+    }
+  };
+
+  let state = BEGIN;
+  let pos = 0;
+  while (pos < input.length && state !== DONE) {
+    state = nextState(state, input.charAt(pos));
+    pos += 1;
+  }
+  return state === DONE ? input.slice(pos - 1) : input;
+}
 
 /**
  * Strip the function definition from `str`,
@@ -39,12 +136,12 @@ const stripFnStart = require('./stripFnStart');
  *
  * @return {String} cleaned code string
  */
-function cleanCode(str) {
+export function cleanCode(str) {
   str = str
     .replace(/\r\n|[\r\n\u2028\u2029]/g, '\n') // unify linebreaks
     .replace(/^\uFEFF/, ''); // replace zero-width no-break space
 
-  str = stripFnStart(str) // replace function declaration
+  str = stripFunctionStart(str) // replace function declaration
     .replace(/\)\s*\)\s*$/, ')') // replace closing paren
     .replace(/\s*};?\s*$/, ''); // replace closing bracket
 
@@ -71,7 +168,7 @@ function cleanCode(str) {
  *
  * @return {string} diff
  */
-function createUnifiedDiff({ actual, expected }) {
+export function createUnifiedDiff({ actual, expected }) {
   return diff
     .createPatch('string', actual, expected)
     .split('\n')
@@ -98,7 +195,7 @@ function createUnifiedDiff({ actual, expected }) {
  *
  * @return {array} diff string objects
  */
-function createInlineDiff({ actual, expected }) {
+export function createInlineDiff({ actual, expected }) {
   return diff.diffWordsWithSpace(actual, expected);
 }
 
@@ -109,7 +206,7 @@ function createInlineDiff({ actual, expected }) {
  *
  * @return {Object} normalized error
  */
-function normalizeErr(err, config) {
+export function normalizeErr(err, config) {
   const { name, message, actual, expected, stack, showDiff } = err;
   let errMessage;
   let errDiff;
@@ -130,8 +227,8 @@ function normalizeErr(err, config) {
   ) {
     /* istanbul ignore if */
     if (!(typeof actual === 'string' && typeof expected === 'string')) {
-      err.actual = mochaUtils.stringify(actual);
-      err.expected = mochaUtils.stringify(expected);
+      err.actual = mochawesomeUtils.stringify(actual);
+      err.expected = mochawesomeUtils.stringify(expected);
     }
     errDiff = config.useInlineDiffs
       ? createInlineDiff(err)
@@ -161,7 +258,7 @@ function normalizeErr(err, config) {
  *
  * @return {Object} cleaned test
  */
-function cleanTest(test, config) {
+export function cleanTest(test, config) {
   const code = config.code ? test.body || '' : '';
 
   const fullTitle =
@@ -204,7 +301,7 @@ function cleanTest(test, config) {
  *
  * @return {Object|boolean} cleaned suite or false if suite is empty
  */
-function cleanSuite(suite, testTotals, config) {
+export function cleanSuite(suite, testTotals, config) {
   let duration = 0;
   const passingTests = [];
   const failingTests = [];
@@ -270,9 +367,9 @@ function cleanSuite(suite, testTotals, config) {
  * @param {Integer} testTotals.skipped
  * @param {Object} config         Reporter configuration
  */
-function mapSuites(suite, testTotals, config) {
+export function cleanSuitesRecursively(suite, testTotals, config) {
   const suites = suite.suites.reduce((acc, subSuite) => {
-    const mappedSuites = mapSuites(subSuite, testTotals, config);
+    const mappedSuites = cleanSuitesRecursively(subSuite, testTotals, config);
     if (mappedSuites) {
       acc.push(mappedSuites);
     }
@@ -281,10 +378,3 @@ function mapSuites(suite, testTotals, config) {
   const toBeCleaned = { ...suite, suites };
   return cleanSuite(toBeCleaned, testTotals, config);
 }
-
-module.exports = {
-  cleanCode,
-  cleanTest,
-  cleanSuite,
-  mapSuites,
-};

@@ -42,10 +42,11 @@ export class Suite {
   constructor(
     public readonly title: string,
     public readonly definition: SuiteCallback,
-    public readonly parent: Suite | Runner,
+    public readonly parent: Suite | null,
     public readonly options: SuiteOptions = Suite.DEFAULT_OPTIONS
   ) {
     this.result = createEmptySuiteResult(this);
+    parent?.addSuite(this);
   }
 
   addSuite(suite: Suite): void {

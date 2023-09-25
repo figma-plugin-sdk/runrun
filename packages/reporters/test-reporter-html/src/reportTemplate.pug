@@ -10,3 +10,31 @@ html
         title Run-figma-run Report
     body(data-raw="{{}}")
         #report
+            script.
+                // Listen for the 'message' event
+                onmessage = (event) => {
+                    // Add your logic to handle the received message here
+                    //- body.setAttribute('data-raw', event.data);
+                    const customEvent = new CustomEvent('ReportDataChanged', { detail: event.data.pluginMessage });
+                    document.dispatchEvent(customEvent);
+                };
+
+                // 
+
+                //- // Function to handle attribute changes
+                //- const handleAttributeChange = (mutationsList) => {
+                //-     for (const mutation of mutationsList) {
+                //-         if (mutation.type === 'attributes' && mutation.attributeName === 'data-raw') {
+                //-             // Custom event triggered when data-raw attribute changes
+                //-             const customEvent = new Event('dataRawAttributeChange', { bubbles: true });
+                //-             body.dispatchEvent(customEvent);
+                //-         }
+                //-     }
+                //- };
+
+                //- // Create a MutationObserver to watch for attribute changes
+                //- const observer = new MutationObserver(handleAttributeChange);
+
+                //- // Start observing changes to the body's attributes
+                //- observer.observe(body, { attributes: true });
+

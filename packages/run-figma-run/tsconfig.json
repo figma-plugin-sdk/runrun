@@ -4,13 +4,13 @@
     "rootDir": "./src",
     "sourceRoot": "./src",
     "baseUrl": "./src",
+    "module": "ES6",
+    "moduleResolution": "Node",
     "types": [
       "bun-types",
       "@figma/plugin-typings"
     ],
-    "lib": [
-      "DOM"
-    ],
+
     "declaration": true
   },
   "files": [],

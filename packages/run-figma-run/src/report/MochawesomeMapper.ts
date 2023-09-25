@@ -6,7 +6,7 @@ import type {
 } from './MochawesomeReport';
 import { Failure, RunRunReport, SuiteResult, TestResult } from './RunRunReport';
 
-export default function mapResultToMocha(
+export function mapResultToMocha(
   report: RunRunReport
 ): MochawesomeReport {
   const mochaAwesomeReport: MochawesomeReport = {
@@ -36,6 +36,7 @@ function mapSuites(
   suites: SuiteResult[],
   parentPath: string
 ): MochawesomeSuiteResult[] {
+  console.log("suites", suites)
   return suites.map((suite) => {
     const mochaSuites = mapSuites(suite.suites, parentPath);
     const mochaTests = mapTests(suite.tests, suite.id, suite.title);
@@ -123,3 +124,5 @@ function mapError(failure: Failure | null): Err {
   };
   return mochaError;
 }
+
+export default mapResultToMocha;

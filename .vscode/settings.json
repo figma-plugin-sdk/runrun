@@ -7,4 +7,10 @@
     "stylelint",
     "Totalizations"
   ],
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb",
+    ".config*": ".docker, docker*, *ignore, .git*, *config, *config.json, *config.js, *config.mjs, *config.cjs, *config.ts, *config.toml, *config.yaml, *config.yml, *rc, *rc.json, *rc.js, *rc.mjs, *rc.cjs, *rc.ts, *rc.toml, *rc.yaml, *rc.yml, webpack.*",
+    "*.json": "${capture}.lock"
+  }
 }

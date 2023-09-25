@@ -9,7 +9,8 @@ import {
 import { Chronometer } from './Chronometer';
 import { wrapWithEnvInClosure } from './utils';
 import { createUnitRunContext } from './contexts';
-import UUID = require('pure-uuid');
+import * as UUID from 'pure-uuid'
+import * as utils from './report/utils';
 
 export type UnitOptions = {
   skip?: boolean;
@@ -48,7 +49,7 @@ export class Unit {
 
       chron.stop();
 
-      this.#result.code = cleanCode(this.testFn.toString());
+      this.#result.code = utils.cleanCode(this.testFn.toString());
       this.#result.status = TestStatus.PASSED;
       this.result.start = chron.startTime;
       this.result.end = chron.endTime;
@@ -57,7 +58,7 @@ export class Unit {
       this.#result = {
         id: new UUID(4).format(),
         title: this.title,
-        code: cleanCode(this.testFn.toString()),
+        code: utils.cleanCode(this.testFn.toString()),
         status: TestStatus.FAILED,
         failure: {
           type: FailureType.EXCEPTION,
@@ -65,7 +66,7 @@ export class Unit {
           message: e.message,
           expected: e.expected,
           actual: e.actual,
-          diff: createUnifiedDiff(e),
+          diff: utils.createUnifiedDiff(e),
         },
         start: chron.startTime,
         end: chron.endTime,

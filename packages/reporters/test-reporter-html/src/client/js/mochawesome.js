@@ -4,29 +4,29 @@ import { createRoot } from 'react-dom/client';
 import { MochawesomeReport } from 'components';
 import hljs from 'highlight.js';
 import ReportStore from './reportStore';
-import json from '../../lib/testJson';
-import ReportTemplate from '../../lib/reportTemplate';
-document.addEventListener('readystatechange', event => {
-  if (event.target.readyState === 'complete') {
-    ReportTemplate(json);
 
-    // Register hljs languages
-    hljs.registerLanguage(
-      'javascript',
-      require('highlight.js/lib/languages/javascript')
-    );
-    hljs.registerLanguage('diff', require('highlight.js/lib/languages/diff'));
+document.addEventListener('ReportDataChanged', event => {
+  console.log('ReportDataChanged', event);
+  // const data = body.getAttribute("data-raw")
+  // console.log("i listen the event", data)
+  //  ReportTemplate(event.detail);
 
-    const store = new ReportStore(json);
+  // Register hljs languages
+  hljs.registerLanguage(
+    'javascript',
+    require('highlight.js/lib/languages/javascript')
+  );
+  hljs.registerLanguage('diff', require('highlight.js/lib/languages/diff'));
 
-    // Add global reference to the store
-    window.marge = store;
+  const store = new ReportStore(event.detail);
 
-    const container = document.getElementById('report');
+  // Add global reference to the store
+  window.marge = store;
 
-    const root = createRoot(container); // createRoot(container!) if you use TypeScript
+  const container = document.getElementById('report');
 
+  const root = createRoot(container);
 
-    root.render(<MochawesomeReport store={store} />);
-  }
+  root.render(<MochawesomeReport store={store} />);
 });
+console.log('event Define');

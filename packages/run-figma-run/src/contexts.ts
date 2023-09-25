@@ -25,6 +25,7 @@ export const rootCtx = {
 export type ExecutionContext = typeof rootCtx;
 
 export function createSuiteCtx(suite: Suite) {
+  console.log('Create ctx:', suite.title);
   const setHookOrThrow = (hookName: string, hook: Task) => {
     if (suite[hookName]) {
       throw new Error(
@@ -37,6 +38,7 @@ export function createSuiteCtx(suite: Suite) {
 
   const env = {
     describe(childTitle: string, childDefinition: SuiteCallback) {
+      console.log('suite ctx describe', suite.title, '>', childTitle);
       const child = new Suite(childTitle, childDefinition, suite);
       wrapWithEnvInClosure(childDefinition, createSuiteCtx(child))();
     },
