@@ -1,4 +1,4 @@
-import * as UUID from 'pure-uuid';
+import { default as UUID } from 'pure-uuid';
 import { Suite } from '../Suite';
 
 export enum TestStatus {
@@ -57,6 +57,7 @@ export type Failure = {
   expected: unknown | null;
   actual: unknown | null;
   diff: string | null;
+  stack: string | null;
 };
 
 export type TestResult = {
@@ -102,13 +103,8 @@ export function createEmptyTestResult(title: string = ''): TestResult {
 /**
  * createSuiteResult returns an object that represents the results BEFORE any test was ran. *
  */
-export function createEmptySuiteResult(suite: Suite): SuiteResult {
-  const testsTotal =
-    suite.tests.length +
-    suite.suites.reduce<number>(
-      (acc: number, child) => acc + child.tests.length,
-      0
-    );
+export function createEmptySuiteResult(suite: Suite) {
+  const testsTotal = countTests(suite);
 
   return {
     id: new UUID(4).format(),
@@ -117,7 +113,7 @@ export function createEmptySuiteResult(suite: Suite): SuiteResult {
     suites: [],
     tests: [],
     stats: {
-      suites: suite.suites.length,
+      suites: suite.suites?.length || 0,
       tests: {
         registered: testsTotal,
         pending: testsTotal,
@@ -133,4 +129,13 @@ export function createEmptySuiteResult(suite: Suite): SuiteResult {
       duration: 0,
     },
   };
+}
+function countTests(suite: Suite): number {
+  return (
+    suite.tests.length +
+    (suite.suites?.reduce(
+      (acc, innerSuite) => acc + countTests(innerSuite),
+      0
+    ) || 0)
+  );
 }

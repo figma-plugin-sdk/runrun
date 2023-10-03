@@ -1,4 +1,4 @@
-import { Runner } from './Runner';
+import { describe } from './Runner';
 import { Suite } from './Suite';
 import { Unit } from './Unit';
 import { SuiteCallback, TestFn } from './types';
@@ -18,13 +18,13 @@ export const rootCtx = {
   it: createMissingDescribeError('it'),
 
   describe(title: string, definition: SuiteCallback) {
-    Runner.describe(title, definition);
+    describe(title, definition);
   },
 };
 
 export type ExecutionContext = typeof rootCtx;
 
-export function createSuiteCtx(suite: Suite) {
+export function createSuiteCtx(suite: Suite, definition: SuiteCallback) {
   console.log('Create ctx:', suite.title);
   const setHookOrThrow = (hookName: string, hook: Task) => {
     if (suite[hookName]) {
@@ -40,14 +40,62 @@ export function createSuiteCtx(suite: Suite) {
     describe(childTitle: string, childDefinition: SuiteCallback) {
       console.log('suite ctx describe', suite.title, '>', childTitle);
       const child = new Suite(childTitle, childDefinition, suite);
-      wrapWithEnvInClosure(childDefinition, createSuiteCtx(child))();
+      wrapWithEnvInClosure(childDefinition, createSuiteCtx(child, child.definition))();
     },
 
     it: (title: string, testFn: TestFn) => {
       const unit = new Unit(title, testFn, suite);
       suite.tests.push(unit);
     },
+    before: (hook) => {
+      if (suite.beforeHook) {
+        throw new Error('before hook is already defined for this suite.');
+      }
+      suite.beforeHook = hook;
+    },
+    after: (hook) => {
+      if (suite.afterHook) {
+        throw new Error('after hook is already defined for this suite.');
+      }
+      suite.afterHook = hook;
+    },
+    beforeEach: (hook) => {
+      if (suite.beforeEachHook) {
+        throw new Error('beforeEach hook is already defined for this suite.');
+      }
+      suite.beforeEachHook = hook;
+    },
+    afterEach: (hook) => {
+      if (suite.afterEachHook) {
+        throw new Error('afterEach hook is already defined for this suite.');
+      }
+      suite.afterEachHook = hook;
+    },
   };
+  const fnScoper = new Function(
+    'describe',
+    'it',
+    'before',
+    'after',
+    'beforeEach',
+    'afterEach',
+    'suite',
+    `return ${definition.toString()}`
+  );
+
+  // Now invoke the scoper with the context to create the function
+  const newFn = fnScoper(
+    env.describe,
+    env.it,
+    env.before,
+    env.after,
+    env.beforeEach,
+    env.afterEach,
+    suite
+  );
+
+  // invoke the newFn
+  newFn();
 
   for (const hook of ['before', 'after', 'beforeEach', 'afterEach']) {
     env[hook] = (hookCallback: Task) => setHookOrThrow(hook, hookCallback);

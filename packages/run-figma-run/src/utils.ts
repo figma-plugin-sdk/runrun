@@ -1,3 +1,5 @@
+import { FailureType, TestStatus } from "./";
+
 export type Task = () => void | Promise<void>;
 
 /**
@@ -124,4 +126,56 @@ export function runWithEnv(task: Task, env: Record<string, unknown>) {
   console.log('running with env', task, env);
   const wrapped = wrapWithEnvInClosure(task, env);
   return new wrapped();
+}
+/**
+ * Records the test result and updates the stats accordingly.
+ *
+ * @param {TestResult} testResult - The test result to update.
+ * @param {Stats} stats - The stats to update.
+ * @param {TestStatus} status - The status of the test.
+ * @param {Error} [error] - The error, if any, during test execution.
+ */
+//todo: verify type
+export function recordTestResult(testResult, stats, status, error = null) {
+  testResult.status = status;
+  testResult.end = Date.now();
+  testResult.duration = testResult.end - testResult.start;
+
+  stats.tests.pending--;
+  stats.tests.executed++;
+
+  switch (status) {
+    case TestStatus.PASSED:
+      stats.tests.passed++;
+      break;
+    case TestStatus.FAILED:
+      stats.tests.failed++;
+      testResult.failure = {
+        type: FailureType.ASSERTION,
+        object: error,
+        message: error.message,
+        expected: null,
+        actual: null,
+        diff: null,
+      };
+      break;
+    case TestStatus.SKIPPED:
+      stats.tests.skipped++;
+      break;
+  }
+}
+/**
+ * Updates the suite result after execution.
+ *
+ * @param {SuiteResult} suiteResult - The suite result to update.
+ */
+export function recordSuiteResult(suiteResult) {
+  suiteResult.stats.end = new Date();
+  suiteResult.stats.duration =
+    Number(suiteResult.stats.end) - Number(suiteResult.stats.start);
+  suiteResult.stats.passPercent =
+    (suiteResult.stats.tests.passed / suiteResult.stats.tests.registered) * 100;
+  suiteResult.stats.executedPercent =
+    (suiteResult.stats.tests.executed / suiteResult.stats.tests.registered) *
+    100;
 }

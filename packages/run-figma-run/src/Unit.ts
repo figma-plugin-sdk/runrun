@@ -67,6 +67,7 @@ export class Unit {
           expected: e.expected,
           actual: e.actual,
           diff: utils.createUnifiedDiff(e),
+          stack: ''
         },
         start: chron.startTime,
         end: chron.endTime,

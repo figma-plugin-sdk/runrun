@@ -3,7 +3,7 @@ import { RunRunReport, mapResultToMocha } from './report';
 import { Unit, UnitOptions } from './Unit';
 import { createSuiteCtx } from './contexts';
 import { SuiteCallback, TestFn } from './types';
-import { runWithEnv } from './utils';
+import { recordSuiteResult, runWithEnv } from './utils';
 
 // const reporterHtml = require('@cva/test-reporter-html/dist/index.html');
 
@@ -15,7 +15,7 @@ export class Runner {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private rootSuite: Suite = new Suite('root', () => {}, null);
+  private rootSuite: Suite = new Suite('#root', null, null);
 
   private constructor() {}
 
@@ -32,10 +32,10 @@ export class Runner {
         Runner.instance.rootSuite,
         options);
 
-    runWithEnv(
-      definition,
-      createSuiteCtx(newSuite)
-    );
+    // runWithEnv(
+    //   definition,
+    //   createSuiteCtx(newSuite, definition)
+    // );
 
     return newSuite;
   }
@@ -56,9 +56,9 @@ export class Runner {
       ...res,
       isRoot: true,
     }));
-
-    figma.ui.postMessage(mapResultToMocha(result));
-
+    //todo: verify map
+    // figma.ui.postMessage(mapResultToMocha(result));
+    recordSuiteResult(result);
     return result;
   }
 }

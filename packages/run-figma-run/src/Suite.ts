@@ -1,8 +1,9 @@
-import { ExecutionContext, createUnitRunContext } from './contexts';
-import { Runner } from './Runner';
+import { ExecutionContext } from './contexts';
+// import { Runner } from './Runner';
 import { Unit } from './Unit';
 import { SuiteResult, TestResult, createEmptySuiteResult } from './report';
 import { SuiteCallback } from './types';
+import { recordSuiteResult, recordTestResult } from 'utils';
 
 export type SuiteOptions = {
   skip?: boolean;
@@ -45,7 +46,8 @@ export class Suite {
     public readonly parent: Suite | null,
     public readonly options: SuiteOptions = Suite.DEFAULT_OPTIONS
   ) {
-    this.result = createEmptySuiteResult(this);
+    //todo: infer type
+    this.result = createEmptySuiteResult(this) as SuiteResult;
     parent?.addSuite(this);
   }
 
@@ -114,6 +116,7 @@ export class Suite {
     this.result.stats.executedPercent = tests.executed / tests.registered;
 
     this.result.suites.push(childResults);
+    recordSuiteResult(childResults)
   }
 
   /**
@@ -131,5 +134,6 @@ export class Suite {
 
     this.result.stats.passPercent = tests.passed / tests.registered;
     this.result.stats.executedPercent = tests.executed / tests.registered;
+    recordTestResult(result, result.status, result.status);
   }
 }
