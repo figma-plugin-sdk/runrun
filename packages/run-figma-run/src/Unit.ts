@@ -9,7 +9,7 @@ import {
 import { Chronometer } from './Chronometer';
 import { wrapWithEnvInClosure } from './utils';
 import { createUnitRunContext } from './contexts';
-import * as UUID from 'pure-uuid'
+import { default as UUID } from 'pure-uuid';
 import * as utils from './report/utils';
 
 export type UnitOptions = {
@@ -44,9 +44,9 @@ export class Unit {
 
     try {
       chron.start();
-
-      wrapWithEnvInClosure(this.testFn, createUnitRunContext(this))();
-
+      //todo: resolve this type error
+      //@ts-ignore
+      await this.testFn(this);
       chron.stop();
 
       this.#result.code = utils.cleanCode(this.testFn.toString());
@@ -74,7 +74,6 @@ export class Unit {
         duration: chron.getElapsedTime(),
       };
     }
-
     return this.result;
   }
 }

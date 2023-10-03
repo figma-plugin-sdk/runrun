@@ -1,4 +1,4 @@
-import { FailureType, TestStatus } from "./";
+import { FailureType, Stats, TestResult, TestStatus } from './';
 
 export type Task = () => void | Promise<void>;
 
@@ -111,9 +111,9 @@ export function wrapWithEnvInClosure(task: Task, env: Record<string, unknown>) {
     const it = clonedEnv.it;
 
     console.log('Enclosing', task, clonedEnv);
-    
+
     // Merge env properties to 'this' within the function
-    // console.log('Assigning ', clonedEnv, ' to ', ClosureForEnv);
+    console.log('Assigning ', clonedEnv, ' to ', ClosureForEnv);
     Object.assign(this, clonedEnv);
 
     // Run the task function
@@ -136,7 +136,12 @@ export function runWithEnv(task: Task, env: Record<string, unknown>) {
  * @param {Error} [error] - The error, if any, during test execution.
  */
 //todo: verify type
-export function recordTestResult(testResult, stats, status, error = null) {
+export function recordTestResult(
+  testResult: TestResult,
+  stats: Stats,
+  status: TestStatus,
+  error: Error = null
+) {
   testResult.status = status;
   testResult.end = Date.now();
   testResult.duration = testResult.end - testResult.start;
@@ -157,6 +162,7 @@ export function recordTestResult(testResult, stats, status, error = null) {
         expected: null,
         actual: null,
         diff: null,
+        stack: '',
       };
       break;
     case TestStatus.SKIPPED:

@@ -103,7 +103,7 @@ export function createEmptyTestResult(title: string = ''): TestResult {
 /**
  * createSuiteResult returns an object that represents the results BEFORE any test was ran. *
  */
-export function createEmptySuiteResult(suite: Suite) {
+export function createEmptySuiteResult(suite: Suite): SuiteResult {
   const testsTotal = countTests(suite);
 
   return {

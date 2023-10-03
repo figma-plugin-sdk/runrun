@@ -5,6 +5,7 @@
     "sourceRoot": "./src",
     "baseUrl": "./src",
     "module": "ES6",
+    "allowSyntheticDefaultImports":true,
     "moduleResolution": "Node",
     "types": [
       "bun-types",

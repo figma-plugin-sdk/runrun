@@ -14,7 +14,6 @@ export class Runner {
     return Runner.#instance ?? (Runner.#instance = new Runner());
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   private rootSuite: Suite = new Suite('#root', null, null);
 
   private constructor() {}
@@ -25,17 +24,13 @@ export class Runner {
     options?: SuiteOptions
   ): Suite {
     console.log('Runner.describe', name, definition, options);
-    const newSuite =
-      new Suite(
-        name,
-        definition,
-        Runner.instance.rootSuite,
-        options);
-
-    // runWithEnv(
-    //   definition,
-    //   createSuiteCtx(newSuite, definition)
-    // );
+    const newSuite = new Suite(
+      name,
+      definition,
+      Runner.instance.rootSuite,
+      options
+    );
+    createSuiteCtx(newSuite, definition);
 
     return newSuite;
   }
@@ -58,7 +53,6 @@ export class Runner {
     }));
     //todo: verify map
     // figma.ui.postMessage(mapResultToMocha(result));
-    recordSuiteResult(result);
     return result;
   }
 }

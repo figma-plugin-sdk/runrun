@@ -46,8 +46,7 @@ export class Suite {
     public readonly parent: Suite | null,
     public readonly options: SuiteOptions = Suite.DEFAULT_OPTIONS
   ) {
-    //todo: infer type
-    this.result = createEmptySuiteResult(this) as SuiteResult;
+    this.result = createEmptySuiteResult(this);
     parent?.addSuite(this);
   }
 
@@ -92,7 +91,6 @@ export class Suite {
     if (this.afterHook) {
       await this.afterHook();
     }
-
     return this.result;
   }
 
@@ -102,21 +100,21 @@ export class Suite {
   async #runSuite(childSuite: Suite) {
     const childResults = await childSuite.run();
 
-    const tests = this.result.stats.tests;
-    const childTests = childResults.stats.tests;
+    // const tests = this.result.stats.tests;
+    // const childTests = childResults.stats.tests;
 
-    tests.registered += childTests.registered;
-    tests.pending -= childTests.executed;
-    tests.executed -= childTests.executed;
-    tests.failed += childTests.failed;
-    tests.passed += childTests.passed;
-    tests.skipped += childTests.skipped;
+    // tests.registered += childTests.registered;
+    // tests.pending -= childTests.executed;
+    // tests.executed -= childTests.executed;
+    // tests.failed += childTests.failed;
+    // tests.passed += childTests.passed;
+    // tests.skipped += childTests.skipped;
 
-    this.result.stats.passPercent = tests.passed / tests.registered;
-    this.result.stats.executedPercent = tests.executed / tests.registered;
+    // this.result.stats.passPercent = tests.passed / tests.registered;
+    // this.result.stats.executedPercent = tests.executed / tests.registered;
 
     this.result.suites.push(childResults);
-    recordSuiteResult(childResults)
+    recordSuiteResult(childResults);
   }
 
   /**
@@ -125,15 +123,21 @@ export class Suite {
   async #runTest(test: Unit) {
     // Run test
     const result = await test.run(false);
-    const tests = this.result.stats.tests;
+    // const tests = this.result.stats.tests;
 
-    // Increment tests counter
-    tests.executed++;
-    tests.pending--;
-    tests[result.status]++;
+    // // Increment tests counter
+    // tests.executed++;
+    // tests.pending--;
+    // tests[result.status]++;
 
-    this.result.stats.passPercent = tests.passed / tests.registered;
-    this.result.stats.executedPercent = tests.executed / tests.registered;
-    recordTestResult(result, result.status, result.status);
+    // this.result.stats.passPercent = tests.passed / tests.registered;
+    // this.result.stats.executedPercent = tests.executed / tests.registered;
+
+    recordTestResult(
+      result,
+      this.result.stats,
+      result.status,
+      result.failure?.object
+    );
   }
 }

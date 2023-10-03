@@ -26,26 +26,30 @@ export type ExecutionContext = typeof rootCtx;
 
 export function createSuiteCtx(suite: Suite, definition: SuiteCallback) {
   console.log('Create ctx:', suite.title);
-  const setHookOrThrow = (hookName: string, hook: Task) => {
-    if (suite[hookName]) {
-      throw new Error(
-        `A ${hookName} hook is already defined for the ${suite.title} suite.`
-      );
-    }
+  // const setHookOrThrow = (hookName: string, hook: Task) => {
+  //   if (suite[hookName]) {
+  //     throw new Error(
+  //       `A ${hookName} hook is already defined for the ${suite.title} suite.`
+  //     );
+  //   }
 
-    suite[hookName] = hook;
-  };
+  //   suite[hookName] = hook;
+  // };
 
   const env = {
+    title: suite.title,
     describe(childTitle: string, childDefinition: SuiteCallback) {
       console.log('suite ctx describe', suite.title, '>', childTitle);
       const child = new Suite(childTitle, childDefinition, suite);
-      wrapWithEnvInClosure(childDefinition, createSuiteCtx(child, child.definition))();
+      createSuiteCtx(child, childDefinition)
+      child.run()
     },
 
     it: (title: string, testFn: TestFn) => {
+      console.log('test', title, 'test fn', testFn)
       const unit = new Unit(title, testFn, suite);
-      suite.tests.push(unit);
+      //todo: true or false?
+      unit.run(true)
     },
     before: (hook) => {
       if (suite.beforeHook) {
@@ -94,13 +98,11 @@ export function createSuiteCtx(suite: Suite, definition: SuiteCallback) {
     suite
   );
 
+  // for (const hook of ['before', 'after', 'beforeEach', 'afterEach']) {
+  //   env[hook] = (hookCallback: Task) => setHookOrThrow(hook, hookCallback);
+  // }
   // invoke the newFn
   newFn();
-
-  for (const hook of ['before', 'after', 'beforeEach', 'afterEach']) {
-    env[hook] = (hookCallback: Task) => setHookOrThrow(hook, hookCallback);
-  }
-
   return env;
 }
 
