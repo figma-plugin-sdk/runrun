@@ -1,4 +1,3 @@
-import { Suite } from './Suite';
 import { TestFn } from './types';
 import {
   TestStatus,
@@ -7,8 +6,6 @@ import {
   FailureType,
 } from './report';
 import { Chronometer } from './Chronometer';
-import { wrapWithEnvInClosure } from './utils';
-import { createUnitRunContext } from './contexts';
 import { default as UUID } from 'pure-uuid';
 import * as utils from './report/utils';
 
@@ -32,10 +29,8 @@ export class Unit {
   constructor(
     public readonly title: string,
     public readonly testFn: TestFn,
-    public readonly scope: Suite,
     public readonly options: UnitOptions = Unit.DEFAULT_OPTIONS
   ) {
-    scope.addUnit(this);
     this.#result = createEmptyTestResult(title);
   }
 

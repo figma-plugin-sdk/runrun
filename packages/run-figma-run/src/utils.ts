@@ -135,26 +135,21 @@ export function runWithEnv(task: Task, env: Record<string, unknown>) {
  * @param {TestStatus} status - The status of the test.
  * @param {Error} [error] - The error, if any, during test execution.
  */
-//todo: verify type
+
 export function recordTestResult(
   testResult: TestResult,
-  stats: Stats,
-  status: TestStatus,
+  stats: Stats['tests'],
   error: Error = null
 ) {
-  testResult.status = status;
-  testResult.end = Date.now();
-  testResult.duration = testResult.end - testResult.start;
+  stats.pending--;
+  stats.executed++;
 
-  stats.tests.pending--;
-  stats.tests.executed++;
-
-  switch (status) {
+  switch (testResult.status) {
     case TestStatus.PASSED:
-      stats.tests.passed++;
+      stats.passed++;
       break;
     case TestStatus.FAILED:
-      stats.tests.failed++;
+      stats.failed++;
       testResult.failure = {
         type: FailureType.ASSERTION,
         object: error,
@@ -166,7 +161,7 @@ export function recordTestResult(
       };
       break;
     case TestStatus.SKIPPED:
-      stats.tests.skipped++;
+      stats.skipped++;
       break;
   }
 }
@@ -176,9 +171,7 @@ export function recordTestResult(
  * @param {SuiteResult} suiteResult - The suite result to update.
  */
 export function recordSuiteResult(suiteResult) {
-  suiteResult.stats.end = new Date();
-  suiteResult.stats.duration =
-    Number(suiteResult.stats.end) - Number(suiteResult.stats.start);
+
   suiteResult.stats.passPercent =
     (suiteResult.stats.tests.passed / suiteResult.stats.tests.registered) * 100;
   suiteResult.stats.executedPercent =

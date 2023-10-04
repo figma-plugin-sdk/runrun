@@ -26,50 +26,38 @@ export type ExecutionContext = typeof rootCtx;
 
 export function createSuiteCtx(suite: Suite, definition: SuiteCallback) {
   console.log('Create ctx:', suite.title);
-  // const setHookOrThrow = (hookName: string, hook: Task) => {
-  //   if (suite[hookName]) {
-  //     throw new Error(
-  //       `A ${hookName} hook is already defined for the ${suite.title} suite.`
-  //     );
-  //   }
-
-  //   suite[hookName] = hook;
-  // };
-
   const env = {
     title: suite.title,
     describe(childTitle: string, childDefinition: SuiteCallback) {
       console.log('suite ctx describe', suite.title, '>', childTitle);
       const child = new Suite(childTitle, childDefinition, suite);
-      createSuiteCtx(child, childDefinition)
-      child.run()
+      suite.addSuite(child);
+      createSuiteCtx(child, childDefinition);
     },
 
     it: (title: string, testFn: TestFn) => {
-      console.log('test', title, 'test fn', testFn)
-      const unit = new Unit(title, testFn, suite);
-      //todo: true or false?
-      unit.run(true)
+      const unit = new Unit(title, testFn);
+      suite.addUnit(unit);
     },
-    before: (hook) => {
+    before: (hook: Function) => {
       if (suite.beforeHook) {
         throw new Error('before hook is already defined for this suite.');
       }
       suite.beforeHook = hook;
     },
-    after: (hook) => {
+    after: (hook: Function) => {
       if (suite.afterHook) {
         throw new Error('after hook is already defined for this suite.');
       }
       suite.afterHook = hook;
     },
-    beforeEach: (hook) => {
+    beforeEach: (hook: Function) => {
       if (suite.beforeEachHook) {
         throw new Error('beforeEach hook is already defined for this suite.');
       }
       suite.beforeEachHook = hook;
     },
-    afterEach: (hook) => {
+    afterEach: (hook: Function) => {
       if (suite.afterEachHook) {
         throw new Error('afterEach hook is already defined for this suite.');
       }
@@ -98,22 +86,7 @@ export function createSuiteCtx(suite: Suite, definition: SuiteCallback) {
     suite
   );
 
-  // for (const hook of ['before', 'after', 'beforeEach', 'afterEach']) {
-  //   env[hook] = (hookCallback: Task) => setHookOrThrow(hook, hookCallback);
-  // }
-  // invoke the newFn
   newFn();
   return env;
 }
 
-export function createUnitRunContext(task: Unit, useWorkers: boolean = false) {
-  const testCtx = {
-    suite: task.scope,
-
-    fail(message: string): void {
-      throw new Error(`Test failed: ${message}`);
-    },
-  };
-
-  return testCtx;
-}

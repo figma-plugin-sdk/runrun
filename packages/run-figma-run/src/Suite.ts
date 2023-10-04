@@ -1,7 +1,5 @@
-import { ExecutionContext } from './contexts';
-// import { Runner } from './Runner';
 import { Unit } from './Unit';
-import { SuiteResult, TestResult, createEmptySuiteResult } from './report';
+import { SuiteResult, createEmptySuiteResult } from './report';
 import { SuiteCallback } from './types';
 import { recordSuiteResult, recordTestResult } from 'utils';
 
@@ -47,13 +45,11 @@ export class Suite {
     public readonly options: SuiteOptions = Suite.DEFAULT_OPTIONS
   ) {
     this.result = createEmptySuiteResult(this);
-    parent?.addSuite(this);
   }
 
   addSuite(suite: Suite): void {
     this.children.push(suite);
     this.result.stats.suites++;
-    this.result.stats.tests.pending++;
   }
 
   addUnit(unit: Unit): void {
@@ -74,13 +70,25 @@ export class Suite {
       if (this.beforeEachHook) {
         await this.beforeEachHook();
       }
-
-      if (child instanceof Suite) {
-        this.#runSuite(child);
-      } else {
-        this.#runTest(child);
+      if (child instanceof Unit) {
+        const testResult = await child.run(true);
+        this.result.tests.push(testResult);
+        recordTestResult(
+          testResult,
+          this.result.stats.tests,
+          testResult.failure?.object
+        );
+      } else if (child instanceof Suite) {
+        const childReport = await child.run();
+        this.result.suites.push(childReport);
+        // Update report stats with child report stats
+        this.result.stats.tests.registered +=
+          childReport.stats.tests.registered;
+        this.result.stats.tests.executed += childReport.stats.tests.executed;
+        this.result.stats.tests.passed += childReport.stats.tests.passed;
+        this.result.stats.tests.failed += childReport.stats.tests.failed;
+        this.result.stats.tests.skipped += childReport.stats.tests.skipped;
       }
-
       // Run afterEach hook if present
       if (this.afterEachHook) {
         await this.afterEachHook();
@@ -91,53 +99,7 @@ export class Suite {
     if (this.afterHook) {
       await this.afterHook();
     }
+    recordSuiteResult(this.result);
     return this.result;
-  }
-
-  /**
-   * Runs the child suite and updates the results properties
-   */
-  async #runSuite(childSuite: Suite) {
-    const childResults = await childSuite.run();
-
-    // const tests = this.result.stats.tests;
-    // const childTests = childResults.stats.tests;
-
-    // tests.registered += childTests.registered;
-    // tests.pending -= childTests.executed;
-    // tests.executed -= childTests.executed;
-    // tests.failed += childTests.failed;
-    // tests.passed += childTests.passed;
-    // tests.skipped += childTests.skipped;
-
-    // this.result.stats.passPercent = tests.passed / tests.registered;
-    // this.result.stats.executedPercent = tests.executed / tests.registered;
-
-    this.result.suites.push(childResults);
-    recordSuiteResult(childResults);
-  }
-
-  /**
-   * Runs the child test and updates the results properties
-   */
-  async #runTest(test: Unit) {
-    // Run test
-    const result = await test.run(false);
-    // const tests = this.result.stats.tests;
-
-    // // Increment tests counter
-    // tests.executed++;
-    // tests.pending--;
-    // tests[result.status]++;
-
-    // this.result.stats.passPercent = tests.passed / tests.registered;
-    // this.result.stats.executedPercent = tests.executed / tests.registered;
-
-    recordTestResult(
-      result,
-      this.result.stats,
-      result.status,
-      result.failure?.object
-    );
   }
 }

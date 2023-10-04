@@ -30,6 +30,7 @@ export class Runner {
       Runner.instance.rootSuite,
       options
     );
+    Runner.instance.rootSuite.addSuite(newSuite);
     createSuiteCtx(newSuite, definition);
 
     return newSuite;
@@ -38,10 +39,9 @@ export class Runner {
   public static it(
     name: string,
     definition: TestFn,
-    scope: Suite = Runner.#instance.rootSuite,
     options: UnitOptions = Unit.DEFAULT_OPTIONS
   ): Unit {
-    return new Unit(name, definition, scope, options);
+    return new Unit(name, definition, options);
   }
 
   public async run(): Promise<RunRunReport> {
@@ -51,6 +51,7 @@ export class Runner {
       ...res,
       isRoot: true,
     }));
+    recordSuiteResult(result);
     //todo: verify map
     // figma.ui.postMessage(mapResultToMocha(result));
     return result;
