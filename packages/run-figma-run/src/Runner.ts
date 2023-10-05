@@ -2,7 +2,7 @@ import { Suite, SuiteOptions } from './Suite';
 import { RunRunReport, mapResultToMocha } from './report';
 import { Unit, UnitOptions } from './Unit';
 import { createSuiteCtx } from './contexts';
-import { SuiteCallback, TestFn } from './types';
+import { SuiteDefinitionFn, UnitDefinitionFn } from './types';
 import { recordSuiteResult, runWithEnv } from './utils';
 
 // const reporterHtml = require('@cva/test-reporter-html/dist/index.html');
@@ -20,7 +20,7 @@ export class Runner {
 
   public static describe(
     name: string,
-    definition: SuiteCallback,
+    definition: SuiteDefinitionFn,
     options?: SuiteOptions
   ): Suite {
     console.log('Runner.describe', name, definition, options);
@@ -38,7 +38,7 @@ export class Runner {
 
   public static it(
     name: string,
-    definition: TestFn,
+    definition: UnitDefinitionFn,
     options: UnitOptions = Unit.DEFAULT_OPTIONS
   ): Unit {
     return new Unit(name, definition, options);
@@ -57,6 +57,3 @@ export class Runner {
     return result;
   }
 }
-
-export const describe = Runner.describe;
-export const it = Runner.it;

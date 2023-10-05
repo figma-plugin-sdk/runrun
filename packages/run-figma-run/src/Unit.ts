@@ -1,4 +1,4 @@
-import { TestFn } from './types';
+import { UnitDefinitionFn } from './types';
 import {
   TestStatus,
   TestResult,
@@ -28,7 +28,7 @@ export class Unit {
 
   constructor(
     public readonly title: string,
-    public readonly testFn: TestFn,
+    public readonly testFn: UnitDefinitionFn,
     public readonly options: UnitOptions = Unit.DEFAULT_OPTIONS
   ) {
     this.#result = createEmptyTestResult(title);
@@ -62,7 +62,7 @@ export class Unit {
           expected: e.expected,
           actual: e.actual,
           diff: utils.createUnifiedDiff(e),
-          stack: ''
+          stack: '',
         },
         start: chron.startTime,
         end: chron.endTime,

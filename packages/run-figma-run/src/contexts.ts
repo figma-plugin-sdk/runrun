@@ -1,13 +1,13 @@
-import { describe } from './Runner';
+import { Runner } from 'Runner';
 import { Suite } from './Suite';
 import { Unit } from './Unit';
-import { SuiteCallback, TestFn } from './types';
+import { SuiteDefinitionFn, UnitDefinitionFn, HookDeclarationFn, UnitDeclarationFn } from './types';
 import { Task, wrapWithEnvInClosure, wrapWithEnvInWorkerCode } from './utils';
 
-function createMissingDescribeError(method: string): () => void {
-  return () => {
-    throw new Error(`The ${method} method must be called inside a describe()`);
-  };
+function createMissingDescribeError<T extends Function = HookDeclarationFn>(method: string): T {
+  return (() => {
+    throw new Error(`The ${method} method must be called inside a suite or describe block.`);
+  }) as any;
 }
 
 export const rootCtx = {
@@ -15,27 +15,25 @@ export const rootCtx = {
   afterEach: createMissingDescribeError('afterEach'),
   before: createMissingDescribeError('before'),
   beforeEach: createMissingDescribeError('beforeEach'),
-  it: createMissingDescribeError('it'),
+  it: createMissingDescribeError<UnitDeclarationFn>('it'),
 
-  describe(title: string, definition: SuiteCallback) {
-    describe(title, definition);
+  describe(title: string, definition: SuiteDefinitionFn) {
+    Runner.describe(title, definition);
   },
 };
 
-export type ExecutionContext = typeof rootCtx;
-
-export function createSuiteCtx(suite: Suite, definition: SuiteCallback) {
+export function createSuiteCtx(suite: Suite, definition: SuiteDefinitionFn) {
   console.log('Create ctx:', suite.title);
   const env = {
     title: suite.title,
-    describe(childTitle: string, childDefinition: SuiteCallback) {
+    describe(childTitle: string, childDefinition: SuiteDefinitionFn) {
       console.log('suite ctx describe', suite.title, '>', childTitle);
       const child = new Suite(childTitle, childDefinition, suite);
       suite.addSuite(child);
       createSuiteCtx(child, childDefinition);
     },
 
-    it: (title: string, testFn: TestFn) => {
+    it: (title: string, testFn: UnitDefinitionFn) => {
       const unit = new Unit(title, testFn);
       suite.addUnit(unit);
     },
@@ -89,4 +87,3 @@ export function createSuiteCtx(suite: Suite, definition: SuiteCallback) {
   newFn();
   return env;
 }
-

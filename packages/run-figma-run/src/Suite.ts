@@ -1,6 +1,6 @@
 import { Unit } from './Unit';
 import { SuiteResult, createEmptySuiteResult } from './report';
-import { SuiteCallback } from './types';
+import { HookDefinitionFn, SuiteDefinitionFn } from './types';
 import { recordSuiteResult, recordTestResult } from 'utils';
 
 export type SuiteOptions = {
@@ -19,10 +19,10 @@ const DEFAULT_OPTIONS: SuiteOptions = {
 
 export class Suite {
   // hooks
-  public beforeHook?: Function;
-  public afterHook?: Function;
-  public beforeEachHook?: Function;
-  public afterEachHook?: Function;
+  public beforeHook?: HookDefinitionFn;
+  public afterHook?: HookDefinitionFn;
+  public beforeEachHook?: HookDefinitionFn;
+  public afterEachHook?: HookDefinitionFn;
 
   public readonly result: SuiteResult;
 
@@ -40,7 +40,7 @@ export class Suite {
 
   constructor(
     public readonly title: string,
-    public readonly definition: SuiteCallback,
+    public readonly definition: SuiteDefinitionFn,
     public readonly parent: Suite | null,
     public readonly options: SuiteOptions = Suite.DEFAULT_OPTIONS
   ) {
